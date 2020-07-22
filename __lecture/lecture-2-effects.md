@@ -75,6 +75,10 @@ React.useEffect(() => {
 }, [someState, someOtherState]);
 ```
 
+<!-- React.useEffect(() => {
+  console.log("some state changed!");
+}, []);  here run the effect after render and re-run it when nothing happens.-->
+
 ---
 
 Neat example: logging
@@ -119,6 +123,7 @@ const App = () => {
 
   fetch("some-url").then((data) => {
     console.log("Got data:", data);
+    // [ {item}]
     setCart(data);
   });
 };
@@ -146,17 +151,31 @@ const App = () => {
 };
 ```
 
+<!-- React.useEffect (() => {
+
+const App = () => {
+  const [count, setCount] = React.useState(0);
+
+  document.title = `You have clicked ${count} times`;
+
+  return <button onClick={() => setCount(count + 1)}>Increment</button>;
+};
+ -->
+
 ---
 
 ```js
+//value false to true.
 const App = ({ color }) => {
   const [value, setValue] = React.useState(false);
 
+  //localStorage persiste data in browser, call a function
   window.localStorage.setItem("value", value);
   window.localStorage.setItem("color", color);
 
   return (
     <div>
+      color: {color}
       Value: {value}
       <button onClick={() => setValue(!value)}>Toggle thing</button>
     </div>
@@ -164,7 +183,46 @@ const App = ({ color }) => {
 };
 ```
 
----
+//also setting color when click on the button.
+
+<!-- const DisplayCount = ({ color }) => {
+  const [value, setValue] = React.useState(false);
+
+React.useEffect(() => {
+ window.localStorage.setItem("value", value);
+  window.localStorage.setItem("color", color);
+}[value,color])
+
+return (
+    <div>
+      color: {color}
+      Value: {value}
+      <button onClick={() => setValue(!value)}>Toggle thing</button>
+    </div>
+  );
+  }
+
+  OR
+  const DisplayCount = ({ color }) => {
+  const [value, setValue] = React.useState(false);
+
+React.useEffect(() => {
+ window.localStorage.setItem("value", value);
+}[value,color])
+
+React.useEffect(() => {
+  window.localStorage.setItem("color", color);
+}[value,color])
+
+return (
+    <div>
+      color: {color}
+      Value: {value}
+      <button onClick={() => setValue(!value)}>Toggle thing</button>
+    </div>
+  );
+  }
+ -->
 
 ```js
 const Modal = ({ handleClose }) => {
@@ -177,6 +235,30 @@ const Modal = ({ handleClose }) => {
   return <div>Modal stuff</div>;
 };
 ```
+
+//press escape should close.
+//dont want to do this in render or else will do it more and more. Run more code than it has to.
+
+<!--
+
+
+const Modal = ({ handleClose }) => {
+  React.useEffect (() => {  window.addEventListener("keydown", (ev) => {
+    if (ev.code === "Escape") {
+      handleClose();
+
+    }
+  });
+
+  return <div>Modal stuff</div>;
+}; -->
+
+### const App = () => {
+
+return (
+{modal && <Modal handleClose= {handleClose}/>
+)
+}
 
 ---
 
