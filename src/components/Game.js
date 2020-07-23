@@ -43,19 +43,19 @@ const Game = () => {
     document.title = `${numCookies} cookies - Cookie Clicker Workshop`;
   }, [numCookies]);
 
-  const handleKeyPress = (ev) => {
-    if (ev.key === "Space") {
-      setNumCookies(numCookies + 1);
-    }
-  };
-
   React.useEffect(() => {
-    window.addEventListener("keyPress", handleKeyPress);
+    const handleKeydown = (ev) => {
+      if (ev.key === "Space") {
+        setNumCookies(numCookies + 1);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeydown);
 
     return () => {
-      window.removeEventListener("keyPress", handleKeyPress);
+      window.removeEventListener("keydown", handleKeydown);
     };
-  }, [numCookies]);
+  });
 
   return (
     <Wrapper>
