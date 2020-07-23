@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
+import Item from "./Item";
+
 import cookieSrc from "../cookie.svg";
 
 const items = [
@@ -31,10 +33,23 @@ const Game = () => {
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
-
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
         {/* TODO: Add <Item> instances here, 1 for each item type. */}
+        {items.map((item) => {
+          console.log('Purchased Items', purchasedItems[item.id])
+          return (
+            <Item
+              key={item.id}
+              name={item.name}
+              cost={item.cost}
+              value={item.value}
+              numOwned={purchasedItems[item.id]}
+              handleClick={() => console.log()}
+            />
+          );
+        })}
+
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
