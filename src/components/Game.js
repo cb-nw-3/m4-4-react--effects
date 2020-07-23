@@ -36,6 +36,9 @@ const Game = () => {
 
   React.useEffect(() => {
     document.title = `${numCookies} cookies - Cookie Clicker`;
+    return () => {
+      document.title = "Cookie Clicker THE GAME";
+    };
   }, [numCookies]);
 
   React.useEffect(() => {
