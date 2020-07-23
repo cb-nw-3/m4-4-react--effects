@@ -1,7 +1,7 @@
 import React from "react";
 
-const Item = ({ name }) => {
-  return <button>{name}</button>;
+const Item = ({ name, numOwned, handleClick }) => {
+  return <button onClick={handleClick}>{name}</button>;
 };
 
 export default Item;
