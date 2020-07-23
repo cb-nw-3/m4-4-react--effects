@@ -7,7 +7,7 @@ const Item = ({ name, items, handleClick }) => {
     if (name === items[0].name) {
       buttonRef.current.focus();
     }
-  });
+  }, []);
 
   return (
     <button ref={buttonRef} onClick={handleClick}>

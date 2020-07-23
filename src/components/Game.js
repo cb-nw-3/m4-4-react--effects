@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import cookieSrc from "../cookie.svg";
 import Item from "./Item";
 import useInterval from "../hooks/use-interval.hook";
+import useKeydown from "../hooks/use-keydown.hook";
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
@@ -33,6 +34,10 @@ const Game = () => {
     return totalCookies;
   };
 
+  const incrementCookies = () => {
+    setNumCookies(numCookies + 1);
+  };
+
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
 
@@ -43,19 +48,21 @@ const Game = () => {
     document.title = `${numCookies} cookies - Cookie Clicker Workshop`;
   }, [numCookies]);
 
-  React.useEffect(() => {
-    const handleKeydown = (ev) => {
-      if (ev.key === "Space") {
-        setNumCookies(numCookies + 1);
-      }
-    };
+  useKeydown("Space", incrementCookies);
 
-    window.addEventListener("keydown", handleKeydown);
+  // React.useEffect(() => {
+  //   const handleKeydown = (ev) => {
+  //     if (ev.key === "Space") {
+  //       setNumCookies(numCookies + 1);
+  //     }
+  //   };
 
-    return () => {
-      window.removeEventListener("keydown", handleKeydown);
-    };
-  });
+  //   window.addEventListener("keydown", handleKeydown);
+
+  //   return () => {
+  //     window.removeEventListener("keydown", handleKeydown);
+  //   };
+  // });
 
   return (
     <Wrapper>
