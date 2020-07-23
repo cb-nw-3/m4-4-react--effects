@@ -78,6 +78,7 @@ const Game = () => {
               key={item.id}
               name={item.name}
               numOwned={purchasedItems}
+              items={items}
               handleClick={() => {
                 if (item.cost > numCookies) {
                   window.alert("You can't afford that");
