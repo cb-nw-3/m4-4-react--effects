@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 import cookieSrc from "../cookie.svg";
 import Item from "./Item";
+import useInterval from "../hooks/use-interval.hook";
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
@@ -19,16 +20,34 @@ const Game = () => {
     grandma: 0,
     farm: 0,
   });
+  // iterate through each type of item, and figure out the total value of the items you have. For example, if you have 3 cursors and 1 farm, your total cookies per tick is 83 (1 × 3 + 80 × 1).
+
+  const calculateCookiesPerTick = (purchasedItems) => {
+    const itemAmountArr = Object.values(purchasedItems);
+    let totalCookies = 0;
+
+    items.forEach((item) => {
+      totalCookies += item.value * itemAmountArr[items.indexOf(item)];
+    });
+
+    return totalCookies;
+  };
+
+  useInterval(() => {
+    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
+
+    setNumCookies(numCookies + numOfGeneratedCookies);
+  }, 1000);
 
   return (
     <Wrapper>
       <GameArea>
         <Indicator>
           <Total>{numCookies} cookies</Total>
-          {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>0</strong> cookies per second
+          <strong>{calculateCookiesPerTick(purchasedItems)} </strong>
+          cookies per second
         </Indicator>
-        <Button onClick={(ev) => setNumCookies(numCookies + 1)}>
+        <Button onClick={() => setNumCookies(numCookies + 1)}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
