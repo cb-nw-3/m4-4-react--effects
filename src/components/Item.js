@@ -2,9 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Item = (props) => {
-console.log(props);
   return (
-    <SingleItem>
+    <SingleItem onClick={props.handleClick}>
       <Description>
         <Name>{props.name}</Name>
         <Cost>Cost: {props.cost} cookies. Produces {props.value} cookies/second </Cost>
@@ -25,6 +24,9 @@ const SingleItem = styled.button`
   border-bottom: 1px solid grey;
   color: white;
   background-color: #222;
+  &:hover{
+      cursor: pointer;
+  }
 `;
 const Description = styled.div`
   display:flex;
