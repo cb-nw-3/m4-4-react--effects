@@ -7,6 +7,7 @@ const Item = ({ name, items, handleClick }) => {
     if (name === items[0].name) {
       buttonRef.current.focus();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

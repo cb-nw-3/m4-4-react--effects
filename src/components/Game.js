@@ -6,6 +6,7 @@ import cookieSrc from "../cookie.svg";
 import Item from "./Item";
 import useInterval from "../hooks/use-interval.hook";
 import useKeydown from "../hooks/use-keydown.hook";
+import useDocumentTitle from "../hooks/use-document-title.hook";
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
@@ -14,14 +15,12 @@ const items = [
 ];
 
 const Game = () => {
-  // TODO: Replace this with React state!
   const [numCookies, setNumCookies] = React.useState(100);
   const [purchasedItems, setPurchasedItems] = React.useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
   });
-  // iterate through each type of item, and figure out the total value of the items you have. For example, if you have 3 cursors and 1 farm, your total cookies per tick is 83 (1 × 3 + 80 × 1).
 
   const calculateCookiesPerTick = (purchasedItems) => {
     const itemAmountArr = Object.values(purchasedItems);
@@ -44,25 +43,12 @@ const Game = () => {
     setNumCookies(numCookies + numOfGeneratedCookies);
   }, 1000);
 
-  React.useEffect(() => {
-    document.title = `${numCookies} cookies - Cookie Clicker Workshop`;
-  }, [numCookies]);
+  useDocumentTitle(
+    `${numCookies} cookies - Cookie Clicker Workshop`,
+    "Cookie Clicker Workshop"
+  );
 
   useKeydown("Space", incrementCookies);
-
-  // React.useEffect(() => {
-  //   const handleKeydown = (ev) => {
-  //     if (ev.key === "Space") {
-  //       setNumCookies(numCookies + 1);
-  //     }
-  //   };
-
-  //   window.addEventListener("keydown", handleKeydown);
-
-  //   return () => {
-  //     window.removeEventListener("keydown", handleKeydown);
-  //   };
-  // });
 
   return (
     <Wrapper>
