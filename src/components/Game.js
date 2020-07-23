@@ -21,16 +21,22 @@ const Game = () => {
   });
 
   const calculateCookiesPerTick = (listOfItems) => {
-    const valueOfCursors = items[0].value * listOfItems["cursor"];
-    const valueOfGrandma = items[1].value * listOfItems["grandma"];
-    const valueOfFarm = items[2].value * listOfItems["farm"];
-    const total = valueOfCursors + valueOfGrandma + valueOfFarm;
+    let total = 0;
+    items.forEach((item) => {
+      total += listOfItems[`${item.id}`] * item.value;
+    });
+
     return total;
   };
+
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
     setNumCookies(numCookies + numOfGeneratedCookies);
   }, 1000);
+
+  React.useEffect(() => {
+    document.title = `${numCookies} cookies - Cookie Clicker`;
+  }, [numCookies]);
 
   return (
     <Wrapper>
