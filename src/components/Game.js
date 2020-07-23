@@ -20,6 +20,18 @@ const Game = () => {
     farm: 0,
   });
 
+  const purchaseItem = (item) => {
+    if (numCookies < item.cost) {
+      return alert("Can't afford this item");
+    } else {
+      setNumCookies(numCookies - item.cost);
+      setPurchasedItems({
+        ...purchasedItems,
+        [item.id]: purchasedItems[item.id] + 1,
+      });
+    }
+  };
+
   return (
     <Wrapper>
       <GameArea>
@@ -29,7 +41,10 @@ const Game = () => {
           <strong>0</strong> cookies per second
         </Indicator>
         <Button>
-          <Cookie src={cookieSrc} />
+          <Cookie
+            src={cookieSrc}
+            onClick={() => setNumCookies(numCookies + 1)}
+          />
         </Button>
       </GameArea>
 
@@ -42,7 +57,7 @@ const Game = () => {
               item={entry}
               numOwned={purchasedItems[entry.id]}
               handleClick={() => {
-                console.log(entry.id);
+                purchaseItem(entry);
               }}
             />
           );
