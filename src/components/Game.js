@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-import cookieSrc from "../cookie.svg";
+import cookieSrc, { ReactComponent } from "../cookie.svg";
 import Item from "./Item";
 
 import useInterval from "../hooks/use-interval.hook";
@@ -21,6 +21,28 @@ const Game = () => {
     grandma: 0,
     farm: 0,
   });
+
+  React.useEffect(() => {
+    document.title = `${numCookies} cookies - Cookie Clicker`;
+
+    return () => {
+      document.title = `Cookie Clicker`;
+    };
+  }, [numCookies]);
+
+  React.useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  });
+
+  const handleKeyDown = (ev) => {
+    if (ev.code === "Space") {
+      setNumCookies(numCookies + 1);
+    }
+  };
 
   const purchaseItem = (item) => {
     if (numCookies < item.cost) {
