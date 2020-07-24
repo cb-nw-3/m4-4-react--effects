@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import cookieSrc from "../cookie.svg";
 import Item from "../components/Item/Item";
 
+import useInterval from "../hooks/use-interval.hook";
+
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
@@ -26,6 +28,24 @@ const Game = () => {
     grandma: 0,
     farm: 0,
   });
+
+  function calculateCookiesPerTick(inventory) {
+    let total = 0;
+
+    //go through each object key-value pair and calc the generated
+    //cookies: inventory * value
+    for (const item in inventory) {
+      let add = items.find((i) => i.id === item).value;
+      total += inventory[item] * add;
+    }
+    return total;
+  }
+
+  useInterval(() => {
+    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
+    // console.log(numOfGeneratedCookies);
+    setNumCookies(numCookies + numOfGeneratedCookies);
+  }, 1000);
 
   return (
     <Wrapper>
