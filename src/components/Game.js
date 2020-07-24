@@ -14,13 +14,18 @@ const items = [
 const Game = () => {
   // TODO: Replace this with React state!
   // const numCookies = 100;
-  const purchasedItems = {
+  // const purchasedItems = {
+  //   cursor: 0,
+  //   grandma: 0,
+  //   farm: 0,
+  // };
+
+  const [numCookies, setNumCookies] = React.useState(100);
+  const [purchasedItems, setPurchasedItems] = React.useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
-  };
-
-  const [numCookies, setNumCookies] = React.useState(100);
+  });
 
   return (
     <Wrapper>
@@ -46,6 +51,15 @@ const Game = () => {
             numOwned={purchasedItems[item.id]}
             handleClick={() => {
               console.log(`${item.name} was clicked!`);
+
+              // update total cookies
+              if (numCookies >= item.cost) {
+                setNumCookies(numCookies - item.cost);
+                purchasedItems[item.id] += 1; //update prop value
+                setPurchasedItems({ ...purchasedItems }); //update state
+              } else {
+                window.alert(`Cannot afford ${item.name}!`);
+              }
             }}
           />
         ))}
