@@ -14,13 +14,7 @@ const items = [
 ];
 
 const Game = () => {
-  // TODO: Replace this with React state!
-  // const numCookies = 100;
-  // const purchasedItems = {
-  //   cursor: 0,
-  //   grandma: 0,
-  //   farm: 0,
-  // };
+  // ###################### STATES #################################
 
   const [numCookies, setNumCookies] = React.useState(100);
   const [purchasedItems, setPurchasedItems] = React.useState({
@@ -29,11 +23,12 @@ const Game = () => {
     farm: 0,
   });
 
+  // ################# UPDATE COOKIE GENERATION ######################
   function calculateCookiesPerTick(inventory) {
     let total = 0;
 
-    //go through each object key-value pair and calc the generated
-    //cookies: inventory * value
+    //go through each object key-value pair and calculate the generated
+    //cookies which is given by inventory * value
     for (const item in inventory) {
       let add = items.find((i) => i.id === item).value;
       total += inventory[item] * add;
@@ -46,6 +41,21 @@ const Game = () => {
     // console.log(numOfGeneratedCookies);
     setNumCookies(numCookies + numOfGeneratedCookies);
   }, 1000);
+
+  // ####################### UPDATE DOCUMENT TITLE ##################
+
+  //parseFloat() and .toLocaleString('en') converts number to string format
+  //with comma seperation by thousands
+  React.useEffect(() => {
+    document.title = `${parseFloat(numCookies).toLocaleString(
+      "en"
+    )} - Cookie Clicker Workshop`;
+    return () => {
+      document.title = "Cookie Clicker Workshop";
+    };
+  });
+
+  // ######################## RENDER REACT APP ######################
 
   return (
     <Wrapper>
@@ -89,6 +99,8 @@ const Game = () => {
     </Wrapper>
   );
 };
+
+// ##################### STYLING COMPONENTS #######################
 
 const Wrapper = styled.div`
   display: flex;
