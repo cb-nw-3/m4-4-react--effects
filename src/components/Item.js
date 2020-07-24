@@ -2,8 +2,20 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Item = (props) => {
+  const ref = React.useRef(null);
+  let firstNameRef = 0;
+  // console.log(ref);
+  React.useEffect(() => {
+    if (props.index === firstNameRef) {
+      ref.current.focus();
+    }
+  }, []);
+
   return (
-    <SingleItem onClick={props.handleClick}>
+    <SingleItem 
+    onClick={props.handleClick}
+    ref={ref}
+    >
       <Description>
         <Name>{props.name}</Name>
         <Cost>Cost: {props.cost} cookies. Produces {props.value} cookies/second </Cost>
@@ -20,12 +32,16 @@ const SingleItem = styled.button`
   justify-content: left;
   width: 500px;
   height: 15%;
+  background: transparent;
   border: none;
   border-bottom: 1px solid grey;
   color: white;
   background-color: #222;
   &:hover{
       cursor: pointer;
+  }
+  &:focus{
+      border: 5px solid blue;
   }
 `;
 const Description = styled.div`
