@@ -13,7 +13,7 @@ const Item = ({
         <Wrapper onClick={handleClick}>
             <Info>
                 <Name>{name}</Name>
-                <Details>Cost: {cost} cookies. Produces {value} cookies/second.</Details>
+                <Details>Cost: {cost} cookies. Produces {value} {value === 1 ? 'cookie' : 'cookies'}/second.</Details>
             </Info>
             <NumItems>{numOwned}</NumItems>
         </Wrapper>

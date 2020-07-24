@@ -6,28 +6,47 @@ import Item from "./Item";
 
 import cookieSrc from "../cookie.svg";
 
+import useInterval from "../../src/hooks/use-interval.hook";
+
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
-  { id: "grandma", name: "Grandma", cost: 100, value: 10 },
-  { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  { id: "grandma", name: "Grandma", cost: 100, value: 5 },
+  { id: "farm", name: "Farm", cost: 1000, value: 40 },
+  { id: "factory", name: "Factory", cost: 5000, value: 100 },
 ];
 
 const Game = () => {
-  const [numCookies, setNumCookies] = React.useState(100);
+  const [numCookies, setNumCookies] = React.useState(10);
 
   const [purchasedItems, setPurchasedItems] = React.useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
+    factory: 0,
   });
 
+  const calculateCookiesPerTick = (purchasedItems) => {
+    console.log(Object.keys(purchasedItems))
+    return Object.keys(purchasedItems).reduce((accumulator, currentValue) => {
+      let numOwned = purchasedItems[currentValue];
+      let item = items.find((item) => item.id === currentValue);
+      let value = item.value;
+
+      return accumulator + value * numOwned;
+    }, 0);
+  }
+
+  useInterval(() => {
+    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems)
+
+    setNumCookies(numCookies + numOfGeneratedCookies);
+  }, 1000)
   return (
     <Wrapper>
       <GameArea>
         <Indicator>
-          <Total>{numCookies} cookies</Total>
-          {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>0</strong> cookies per second
+          <Total>{numCookies} {numCookies === 1 ? 'cookie' : 'cookies'}</Total>
+          <strong>{calculateCookiesPerTick(purchasedItems)}</strong> {calculateCookiesPerTick(purchasedItems) === 1 ? 'cookie' : 'cookies'} per second
         </Indicator>
         <Button
           onClick={() => setNumCookies(numCookies + 1)}
@@ -48,7 +67,7 @@ const Game = () => {
               handleClick={() => {
                 console.log(purchasedItems[item.id])
                 if (numCookies < item.cost) {
-                  alert("Sorry, you don't have enought cookies!");
+                  alert("You don't have enought cookies!");
                   return;
                 } else {
                   setNumCookies(numCookies - item.cost)
@@ -83,6 +102,14 @@ const Button = styled.button`
   border: none;
   background: transparent;
   cursor: pointer;
+  outline: none;
+
+  &:hover{
+        box-shadow: 0px 0px 4px 4px darkblue;
+        border-radius: 2px;
+        padding: 10px;
+        cursor: pointer;
+    }
 `;
 
 const Cookie = styled.img`
