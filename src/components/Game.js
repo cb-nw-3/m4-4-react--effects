@@ -37,6 +37,19 @@ const Game = () => {
     document.title = `Cookie Clicker Workshop`
   }
   }, [numCookies])
+
+  React.useEffect(() => {
+    function handleKeydown(ev) {
+      if (ev.code === 'Space') {
+        setNumCookies(numCookies + 1);
+      }
+    }
+    window.addEventListener('keydown', handleKeydown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeydown)
+    }
+  }, [numCookies])
   
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
