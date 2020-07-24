@@ -37,7 +37,13 @@ const Game = () => {
         <SectionTitle>Items:</SectionTitle>
         {/* TODO: Add <Item> instances here, 1 for each item type. */}
         {items.map((item) => (
-          <Item name={item.name} cost={item.cost} value={item.value} />
+          <Item
+            name={item.name}
+            cost={item.cost}
+            value={item.value}
+            numOwned={purchasedItems[item.id]}
+            handleClick={() => console.log(`${item.name} was clicked!`)}
+          />
         ))}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
