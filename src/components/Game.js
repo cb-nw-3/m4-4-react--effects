@@ -80,6 +80,7 @@ const Game = () => {
             cost={item.cost}
             value={item.value}
             numOwned={purchasedItems[item.id]}
+            key={item.id}
             handleClick={() => {
               console.log(`${item.name} was clicked!`);
 
