@@ -30,7 +30,9 @@ const Game = () => {
     farm: 0,
   });
 
-  
+  React.useEffect(() => {
+    document.title = `${numCookies} cookies - Cookie Clicker Workshop`;
+  }, [numCookies])
   
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
