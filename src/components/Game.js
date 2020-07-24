@@ -31,7 +31,11 @@ const Game = () => {
   });
 
   React.useEffect(() => {
-    document.title = `${numCookies} cookies - Cookie Clicker Workshop`;
+  document.title = `${numCookies} cookies - Cookie Clicker Workshop`;
+  
+  return () => {
+    document.title = `Cookie Clicker Workshop`
+  }
   }, [numCookies])
   
   useInterval(() => {
