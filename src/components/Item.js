@@ -15,12 +15,18 @@ const Item = ({ info, numOwned }) => {
   );
 };
 
-const ItemWrapper = styled.div`
+const ItemWrapper = styled.button`
   display: flex;
   justify-content: space-between;
+  border: none;
   border-bottom: 1px solid gray;
   margin-bottom: 15px;
   padding: 10px 0;
+  background-color: transparent;
+  color: white;
+  div {
+    text-align: left;
+  }
   div > div:first-child {
     font-size: 1.5rem;
     font-weight: 700;
