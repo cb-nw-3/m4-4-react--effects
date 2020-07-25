@@ -444,7 +444,7 @@ Extract a custom hook
 ---
 
 ```js
-const App = ({ path }) => {
+const useDataFromPath = (path) => {
   const [data, setData] = React.useState(null);
 
   React.useEffect(() => {
@@ -455,6 +455,12 @@ const App = ({ path }) => {
       });
   }, [path]);
 
+  return data;
+}
+
+const App = ({ path }) => {
+  const data = useDataFromPath(path);
+
   return <span>Data: {JSON.stringify(data)}</span>;
 };
 ```
@@ -462,18 +468,24 @@ const App = ({ path }) => {
 ---
 
 ```js live=true
-const Time = ({ throttleDuration }) => {
+const setCurrentTime = (throttleDuration) => {
   const [time, setTime] = React.useState(new Date());
 
   React.useEffect(() => {
     const intervalId = window.setInterval(() => {
       setTime(new Date());
     }, throttleDuration);
-
+    
     return () => {
       window.clearInterval(intervalId);
     };
   }, [throttleDuration]);
+
+  return time
+}
+
+const Time = ({ throttleDuration }) => {
+  const time = setCurrentTime(throttleDuration);
 
   return (
     <span>
