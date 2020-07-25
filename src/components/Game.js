@@ -2,10 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
+// Components
 import cookieSrc from "../cookie.svg";
 import Item from "../components/Item/Item";
 
+//Hooks
 import useInterval from "../hooks/use-interval.hook";
+import useKeydown from "../hooks/use-keydown.hook";
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
@@ -55,19 +58,12 @@ const Game = () => {
     };
   });
 
-  //add cookies using spacebar
-  function handleKeydown(event) {
-    if (event.code === "Space") {
-      setNumCookies(numCookies + 1);
-    }
+  //this is the custom hook to add cookies by pressing down on space
+  function addCookie() {
+    setNumCookies(numCookies + 1);
   }
 
-  React.useEffect((event) => {
-    window.addEventListener("keydown", handleKeydown);
-    return () => {
-      window.removeEventListener("keydown", handleKeydown);
-    };
-  });
+  useKeydown("Space", addCookie);
 
   // ######################## RENDER REACT APP ######################
 
