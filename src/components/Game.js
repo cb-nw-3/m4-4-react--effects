@@ -12,12 +12,12 @@ const items = [
 
 const Game = () => {
   // TODO: Replace this with React state!
-  const numCookies = 100;
-  const purchasedItems = {
+  const [numCookies, setNumCookies] = useState(100);
+  const [purchasedItems, setPurchasedItems] = useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
-  };
+  });
 
   return (
     <Wrapper>
@@ -27,15 +27,34 @@ const Game = () => {
           {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>0</strong> cookies per second
         </Indicator>
-        <Button>
+        <Button
+          onClick={() => {
+            setNumCookies(numCookies + 1);
+          }}
+        >
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
-
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {items.map((element) => (
-          <Item info={element} numOwned="0" handleClick="0"></Item>
+        {items.map((element, index) => (
+          <Item
+            key={'btn' + index}
+            info={element}
+            numOwned={purchasedItems[element.id]}
+            handleClick={() => {
+              if (numCookies < element.cost) {
+                alert('Not enough cookies');
+                return;
+              } else {
+                setNumCookies(numCookies - element.cost);
+                setPurchasedItems({
+                  ...purchasedItems,
+                  [element.id]: purchasedItems[element.id] + 1,
+                });
+              }
+            }}
+          ></Item>
         ))}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>

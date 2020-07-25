@@ -1,18 +1,18 @@
-import React from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
+import React from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
-import useInterval from "../hooks/use-interval.hook";
-import useDocumentTitle from "../hooks/use-document-title.hook";
-import useKeydown from "../hooks/use-keydown.hook";
+import useInterval from '../hooks/use-interval.hook';
+import useDocumentTitle from '../hooks/use-document-title.hook';
+import useKeydown from '../hooks/use-keydown.hook';
 
-import cookieSrc from "../cookie.svg";
-import Item from "./Item";
+import cookieSrc from '../cookie.svg';
+import Item from './Item';
 
 const items = [
-  { id: "cursor", name: "Cursor", cost: 10, value: 1 },
-  { id: "grandma", name: "Grandma", cost: 100, value: 10 },
-  { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  { id: 'cursor', name: 'Cursor', cost: 10, value: 1 },
+  { id: 'grandma', name: 'Grandma', cost: 100, value: 10 },
+  { id: 'farm', name: 'Farm', cost: 1000, value: 80 },
 ];
 
 const calculateCookiesPerSecond = (purchasedItems) => {
@@ -40,7 +40,7 @@ const Game = () => {
 
   useDocumentTitle({
     title: `${numCookies} cookies - Cookie Clicker Workshop`,
-    fallbackTitle: "Cookie Clicker Workshop",
+    fallbackTitle: 'Cookie Clicker Workshop',
   });
 
   useInterval(() => {
@@ -49,7 +49,7 @@ const Game = () => {
     setNumCookies(numCookies + numOfGeneratedCookies);
   }, 1000);
 
-  useKeydown("Space", incrementCookies);
+  useKeydown('Space', incrementCookies);
 
   return (
     <Wrapper>
@@ -77,7 +77,7 @@ const Game = () => {
               numOwned={purchasedItems[item.id]}
               handleAttemptedPurchase={() => {
                 if (numCookies < item.cost) {
-                  alert("Cannot afford item");
+                  alert('Cannot afford item');
                   return;
                 }
 

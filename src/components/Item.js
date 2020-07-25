@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Item = ({ info, numOwned }) => {
+const Item = ({ info, numOwned, handleClick }) => {
   return (
-    <ItemWrapper>
+    <ItemWrapper onClick={handleClick}>
       <div>
         <div>{info.name}</div>
         <div>
