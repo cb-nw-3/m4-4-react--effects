@@ -450,11 +450,33 @@ const App = ({ path }) => {
 
   return <span>Data: {JSON.stringify(data)}</span>;
 };
+
+//solution
+
+const useDataFromPath = (path) => {
+  const [data, setData] = React.useState(null);
+
+  React.useEffect(() => {
+    fetch(path)
+      .then((res) => res.json())
+      .then((json) => {
+        setData(json);
+      });
+  }, [path]);
+
+  return data;
+};
+
+const App = ({ path }) => {
+  const data = useDataFromPath(path);
+
+  return <span>Data: {JSON.stringify(data)}</span>;
+};
 ```
 
 ---
 
-```js live=true
+```js
 const Time = ({ throttleDuration }) => {
   const [time, setTime] = React.useState(new Date());
 
@@ -477,5 +499,29 @@ const Time = ({ throttleDuration }) => {
   );
 };
 
+//Solution
+
+function useCurrentTime(throttleDuration) {
+  const [time, setTime] = React.useState(new Date());
+  React.useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setTime(new Date());
+    }, throttleDuration);
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [throttleDuration]);
+  return time;
+}
+const Time = ({ throttleDuration }) => {
+  const time = useCurrentTime(throttleDuration);
+  return (
+    <span>
+      It is currently
+      <br />
+      {time.toTimeString()}
+    </span>
+  );
+};
 render(<Time throttleDuration={1000} />);
 ```

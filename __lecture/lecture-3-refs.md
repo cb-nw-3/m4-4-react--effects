@@ -108,6 +108,18 @@ const ConfirmButton = () => {
 
   return <button id="confirm-button">Confirm</button>;
 };
+
+//solution
+
+const ConfirmButton = () => {
+  const buttonRef = React.useRef(null);
+
+  React.useEffect(() => {
+    buttonRef.current.focus();
+  }, []);
+
+  return <button ref={buttonRef}>Confirm</button>;
+};
 ```
 
 ---
@@ -127,6 +139,26 @@ const PasswordInput = ({ focusOnMount }) => {
       Password:
       <br />
       <input type="password" data-name="pswrd" />
+    </label>
+  );
+};
+
+//solution
+
+const PasswordInput = ({ focusOnMount }) => {
+  const inputRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (focusOnMount) {
+      inputRef.current.focus();
+    }
+  }, []);
+
+  return (
+    <label>
+      Password:
+      <br />
+      <input type="password" data-name="pswrd" ref={inputRef} />
     </label>
   );
 };

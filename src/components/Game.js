@@ -52,7 +52,7 @@ const Game = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  });
+  }, [numCookies]);
 
   return (
     <Wrapper>
@@ -75,9 +75,14 @@ const Game = () => {
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
         {items.map((item, index) => {
+          let isFirst;
+          if (index === 0) {
+            isFirst = true;
+          }
           return (
             <Item
               key={item.name + index}
+              isFirst={isFirst}
               name={item.name}
               cost={item.cost}
               value={item.value}
