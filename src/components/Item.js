@@ -2,15 +2,28 @@ import React from "react";
 import styled from "styled-components";
 
 const Item = ({
-    id,
+    index,
     name,
     cost,
     value,
     numOwned,
     handleClick,
 }) => {
+    const itemRef = React.useRef()
+    React.useEffect(() => {
+        if (index === 0) {
+            itemRef.current.focus()
+        }
+    }, []);
     return (
-        <Wrapper onClick={handleClick}>
+        <Wrapper
+            onClick={handleClick}
+            onKeyDown={function (ev) {
+                ev.stopPropagation();
+            }}
+
+            ref={itemRef}
+        >
             <Info>
                 <Name>{name}</Name>
                 <Details>Cost: {cost} cookies. Produces {value} {value === 1 ? 'cookie' : 'cookies'}/second.</Details>
@@ -31,7 +44,7 @@ const Wrapper = styled.button`
     justify-content: space-between;
     outline: none;
 
-    &:hover{
+    &:focus{
         box-shadow: 0px 0px 4px 4px darkblue;
         border-radius: 2px;
         border-bottom: 2px solid transparent;

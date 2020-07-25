@@ -75,15 +75,17 @@ const Game = () => {
       </GameArea>
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {items.map((item) => {
+        {items.map((item, index) => {
           return (
             <Item
+              index={index}
               key={item.id}
               name={item.name}
               cost={item.cost}
               value={item.value}
               numOwned={purchasedItems[item.id]}
-              handleClick={() => {
+              handleClick={(ev) => {
+                ev.stopPropagation();
                 // console.log(purchasedItems[item.id])
                 if (numCookies < item.cost) {
                   alert("You don't have enought cookies!");
@@ -95,7 +97,6 @@ const Game = () => {
                     [item.id]: purchasedItems[item.id] + 1,
                   })
                 }
-
 
               }}
             />
