@@ -106,6 +106,12 @@ const Button = styled.button`
   border: none;
   background: transparent;
   cursor: pointer;
+  outline: none;
+  transform-origin: 50% 50%;
+
+  &:active{
+    transform: scale(0.80);
+  }
 `;
 
 const Cookie = styled.img`
