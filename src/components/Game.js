@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
+import Item from './Item';
+
 import cookieSrc from "../cookie.svg";
 
 const items = [
@@ -34,7 +36,13 @@ const Game = () => {
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {/* TODO: Add <Item> instances here, 1 for each item type. */}
+        {items.map(item => {
+          return <Item 
+            item={item} 
+            numOwned={purchasedItems[item.id]} 
+            handleClick={item}
+            key={item.id}></Item>
+        })}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
