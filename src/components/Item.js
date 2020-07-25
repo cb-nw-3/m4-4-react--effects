@@ -14,7 +14,10 @@ const Item = ({ item, numOwned, handleClick, focusOnLoad }) => {
 
   switch (item.type) {
     case "cps":
-      description = `Produces: ${item.value} cookie(s)/second.`;
+      description =
+        item.value === 1
+          ? `Produces: ${item.value} cookie/second.`
+          : `Produces: ${item.value} cookies/second.`;
       break;
     case "cursor":
       description = `Adds 1 cookie per click.`;

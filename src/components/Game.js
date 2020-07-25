@@ -10,15 +10,42 @@ import useKeydown from "../hooks/use-keydown.hook";
 import useDocumentTitle from "../hooks/use-documentTitle.hook";
 
 const items = [
-  { id: "cursor", name: "Cursor", cost: 10, value: 1, type: "cps" },
-  { id: "grandma", name: "Grandma", cost: 100, value: 10, type: "cps" },
-  { id: "farm", name: "Farm", cost: 1000, value: 80, type: "cps" },
+  {
+    id: "cursor",
+    name: "Cursor",
+    type: "cps",
+    basePrice: 10,
+    cost: 10,
+    value: 1,
+
+    growth: 1.2,
+  },
+  {
+    id: "grandma",
+    name: "Grandma",
+    type: "cps",
+    basePrice: 100,
+    cost: 100,
+    value: 10,
+    growth: 1.15,
+  },
+  {
+    id: "farm",
+    name: "Farm",
+    type: "cps",
+    basePrice: 1000,
+    cost: 1000,
+    value: 80,
+    growth: 1.12,
+  },
   {
     id: "megaCursor",
     name: "Mega Cursor",
+    type: "cursor",
+    basePrice: 50,
     cost: 50,
     value: 0,
-    type: "cursor",
+    growth: 1.3,
   },
 ];
 
@@ -39,6 +66,18 @@ const Game = () => {
   const enhanceCursor = () => {
     cookiesPerClick = purchasedItems.megaCursor + 1;
   };
+
+  const setPrices = (array) => {
+    array.forEach((item) => {
+      let cost = item.basePrice * item.growth ** purchasedItems[item.id];
+
+      const itemToUpdatePriceFor = items.find((entry) => entry.id === item.id);
+
+      itemToUpdatePriceFor.cost = Math.floor(cost);
+    });
+  };
+
+  setPrices(items);
 
   useDocumentTitle(`${numCookies} cookies - Cookie Clicker`, `Cookie Clicker`);
 
@@ -80,8 +119,12 @@ const Game = () => {
       <GameArea>
         <Indicator>
           <Total>{numCookies} cookies</Total>
-          <strong>{calculateCookiesPerSec(purchasedItems)}</strong> cookies per
-          second
+          <strong>{calculateCookiesPerSec(purchasedItems)}</strong>{" "}
+          {cookiesPerClick === 1 ? "cookie per second" : "cookies per second"}
+          <div>
+            <strong>{cookiesPerClick}</strong>{" "}
+            {cookiesPerClick === 1 ? "cookie per click" : "cookies per click"}
+          </div>
         </Indicator>
         <Button>
           <Cookie src={cookieSrc} onClick={addCookie} />
