@@ -35,7 +35,7 @@ const Game = () => {
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
         {items.map((element) => (
-          <Item info={element}></Item>
+          <Item info={element} numOwned="0" handleClick="0"></Item>
         ))}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
