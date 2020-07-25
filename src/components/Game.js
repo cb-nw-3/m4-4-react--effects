@@ -12,14 +12,21 @@ import useDocumentTitle from "../hooks/use-document-title";
 import useKeyDown from "../hooks/use-event-keydown";
 
 const items = [
-  { id: "cursor", name: "Cursor", cost: 10, value: 1 },
-  { id: "grandma", name: "Grandma", cost: 100, value: 5 },
-  { id: "farm", name: "Farm", cost: 1000, value: 40 },
-  { id: "factory", name: "Factory", cost: 5000, value: 100 },
+  { id: "cursor", name: "Cursor", value: 1 },
+  { id: "grandma", name: "Grandma", value: 5 },
+  { id: "farm", name: "Farm", value: 40 },
+  { id: "factory", name: "Factory", value: 100 },
 ];
 
 const Game = () => {
   const [numCookies, setNumCookies] = React.useState(10);
+
+  const [cost, setCost] = React.useState({
+    cursor: 10,
+    grandma: 100,
+    farm: 1000,
+    factory: 5000,
+  });
 
   const [purchasedItems, setPurchasedItems] = React.useState({
     cursor: 0,
@@ -68,7 +75,7 @@ const Game = () => {
           <strong>{calculateCookiesPerTick(purchasedItems)}</strong> {calculateCookiesPerTick(purchasedItems) === 1 ? 'cookie' : 'cookies'} per second
         </Indicator>
         <Button
-          onClick={() => addCookies}
+          onClick={() => addCookies()}
         >
           <Cookie src={cookieSrc} />
         </Button>
@@ -81,20 +88,24 @@ const Game = () => {
               index={index}
               key={item.id}
               name={item.name}
-              cost={item.cost}
+              cost={cost[item.id]}
               value={item.value}
               numOwned={purchasedItems[item.id]}
               handleClick={(ev) => {
                 ev.stopPropagation();
-                // console.log(purchasedItems[item.id])
-                if (numCookies < item.cost) {
+
+                if (numCookies < cost[item.id]) {
                   alert("You don't have enought cookies!");
                   return;
                 } else {
-                  setNumCookies(numCookies - item.cost)
+                  setNumCookies(numCookies - cost[item.id])
                   setPurchasedItems({
                     ...purchasedItems,
                     [item.id]: purchasedItems[item.id] + 1,
+                  })
+                  setCost({
+                    ...cost,
+                    [item.id]: Math.floor(cost[item.id] * 1.2),
                   })
                 }
 
