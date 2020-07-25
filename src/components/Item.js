@@ -2,7 +2,7 @@ import React from "react";
 
 import styled from "styled-components";
 
-const Item = ({ name, cost, value, numOwned, handleClick, isFirst }) => {
+const Item = ({ name, cost, value, numOwned, handleClick, isFirst, type }) => {
   const buttonRef = React.useRef(null);
 
   React.useEffect(() => {
@@ -16,7 +16,10 @@ const Item = ({ name, cost, value, numOwned, handleClick, isFirst }) => {
       <div>
         <Name>{name}</Name>
         <Effect>
-          Cost: {cost} cookies. Produces {value} cookies/second{" "}
+          Cost: {cost} cookies.
+          {type === "tick"
+            ? ` Produces ${value} cookies/second`
+            : ` Adds ${value} cookies per click`}
         </Effect>
       </div>
       <Num>{numOwned}</Num>

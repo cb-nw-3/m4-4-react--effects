@@ -8,9 +8,10 @@ import useDocumentTitle from "../hooks/useDocumentTitle.hook";
 import cookieSrc from "../cookie.svg";
 
 const items = [
-  { id: "cursor", name: "Cursor", cost: 10, value: 1 },
-  { id: "grandma", name: "Grandma", cost: 100, value: 10 },
-  { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  { id: "cursor", name: "Cursor", cost: 10, value: 1, type: "tick" },
+  { id: "grandma", name: "Grandma", cost: 100, value: 10, type: "tick" },
+  { id: "farm", name: "Farm", cost: 1000, value: 80, type: "tick" },
+  { id: "megacursor", name: "megaCursor", cost: 10, value: 2, type: "click" },
 ];
 
 const Game = () => {
@@ -20,15 +21,26 @@ const Game = () => {
     cursor: 0,
     grandma: 0,
     farm: 0,
+    megacursor: 0,
   });
+  const [cookiesPerClick, setCookiesPerClick] = React.useState(1);
 
   const calculateCookiesPerTick = (listOfItems) => {
     let total = 0;
-    items.forEach((item) => {
+    const filteredItems = items.filter((item) => {
+      return item.type === "tick";
+    });
+    filteredItems.forEach((item) => {
       total += listOfItems[`${item.id}`] * item.value;
     });
 
     return total;
+  };
+
+  const calculateCookiesPerClick = () => {
+    let numToAdd = purchasedItems["megacursor"] * 2;
+    console.log("num to Add", numToAdd);
+    return numToAdd;
   };
 
   const addOneCookie = () => {
@@ -39,6 +51,11 @@ const Game = () => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
     setNumCookies(numCookies + numOfGeneratedCookies);
   }, 1000);
+
+  React.useEffect(() => {
+    const numbOfCookiesPerClick = calculateCookiesPerClick();
+    setCookiesPerClick(1 + numbOfCookiesPerClick);
+  }, [purchasedItems]);
 
   useDocumentTitle(`${numCookies} cookies`, `Click that COOKIE`);
 
@@ -55,7 +72,7 @@ const Game = () => {
         </Indicator>
         <Button
           onClick={() => {
-            setNumCookies(numCookies + 1);
+            setNumCookies(numCookies + cookiesPerClick);
           }}
         >
           <Cookie src={cookieSrc} />
@@ -76,6 +93,7 @@ const Game = () => {
               name={item.name}
               cost={item.cost}
               value={item.value}
+              type={item.type}
               numOwned={purchasedItems[item.id]}
               handleClick={() => {
                 if (item.cost > numCookies) {
