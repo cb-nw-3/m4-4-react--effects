@@ -1,9 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 
-const Item = ({ name, cost, value, numOwned, handleClick }) => {
+const Item = ({ name, cost, value, numOwned, handleClick, index }) => {
+  //this is to focus on the first item only
+  const firstItem = React.createRef();
+
+  React.useEffect(() => {
+    if (index === 0) {
+      firstItem.current.focus();
+    }
+  });
+
   return (
-    <Wrapper onClick={handleClick}>
+    <Wrapper ref={firstItem} onClick={handleClick}>
       <ItemWrapper>
         <ItemName>{name}</ItemName>
         <ItemDescription>

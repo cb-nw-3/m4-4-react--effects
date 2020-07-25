@@ -88,7 +88,7 @@ const Game = () => {
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
         {/* TODO: Add <Item> instances here, 1 for each item type. */}
-        {items.map((item) => (
+        {items.map((item, index) => (
           <Item
             name={item.name}
             cost={item.cost}
@@ -107,6 +107,7 @@ const Game = () => {
                 window.alert(`Cannot afford ${item.name}!`);
               }
             }}
+            index={index}
           />
         ))}
       </ItemArea>
