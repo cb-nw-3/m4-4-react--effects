@@ -9,6 +9,7 @@ import Item from "../components/Item/Item";
 //Hooks
 import useInterval from "../hooks/use-interval.hook";
 import useKeydown from "../hooks/use-keydown.hook";
+import useDocumentTitle from "../hooks/use-documentTitle.hook";
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
@@ -49,13 +50,11 @@ const Game = () => {
 
   //parseFloat() and .toLocaleString('en') converts number to string format
   //with comma seperation by thousands
-  React.useEffect(() => {
-    document.title = `${parseFloat(numCookies).toLocaleString(
+  useDocumentTitle({
+    title: `${parseFloat(numCookies).toLocaleString(
       "en"
-    )} - Cookie Clicker Workshop`;
-    return () => {
-      document.title = "Cookie Clicker Workshop";
-    };
+    )} - Cookie Clicker Workshop`,
+    fallbackTitle: "Cookie Clicker Workshop",
   });
 
   //this is the custom hook to add cookies by pressing down on space
