@@ -15,7 +15,6 @@ const items = [
 
 const Game = () => {
   const [numCookies, setNumCookies] = React.useState(0);
-
   const [purchasedItems, setPurchasedItems] = React.useState({
     cursor: 0,
     grandma: 0,
@@ -40,6 +39,7 @@ const Game = () => {
 
   const handleKeyDown = (ev) => {
     if (ev.code === "Space") {
+      ev.preventDefault();
       setNumCookies(numCookies + 1);
     }
   };
@@ -91,12 +91,17 @@ const Game = () => {
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {items.map((entry) => {
+        {items.map((entry, index) => {
+          let firstItem = false;
+          if (index === 0) {
+            firstItem = true;
+          }
           return (
             <Item
               key={entry.id}
               item={entry}
               numOwned={purchasedItems[entry.id]}
+              focusOnLoad={firstItem}
               handleClick={() => {
                 purchaseItem(entry);
               }}

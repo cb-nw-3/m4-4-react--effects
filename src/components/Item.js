@@ -1,9 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 
-const Item = ({ item, numOwned, handleClick }) => {
+const Item = ({ item, numOwned, handleClick, focusOnLoad }) => {
+  const buttonRef = React.useRef();
+
+  React.useEffect(() => {
+    if (focusOnLoad) {
+      buttonRef.current.focus();
+    }
+  }, []);
+
   return (
-    <Wrapper onMouseDown={handleClick}>
+    <Wrapper onClick={handleClick} ref={buttonRef}>
       <div>
         <Title>{item.name}</Title>
         <Description>
