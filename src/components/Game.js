@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 import cookieSrc from "../cookie.svg";
+import Item from "./Item.js";
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
@@ -19,6 +20,9 @@ const Game = () => {
     farm: 0,
   };
 
+  function HandleClick(event) {
+    console.log(event.target);
+  }
   return (
     <Wrapper>
       <GameArea>
@@ -27,14 +31,17 @@ const Game = () => {
           {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>0</strong> cookies per second
         </Indicator>
-        <Button>
+        <Button onClick={HandleClick}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {/* TODO: Add <Item> instances here, 1 for each item type. */}
+
+        {items.map((item) => {
+          return <Item item={item}></Item>;
+        })}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
@@ -66,6 +73,7 @@ const ItemArea = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 400px;
 `;
 
 const SectionTitle = styled.h3`
