@@ -6,7 +6,10 @@ import Item from "./Item";
 
 import cookieSrc from "../cookie.svg";
 
+//hooks
 import useInterval from "../../src/hooks/use-interval.hook";
+import useDocumentTitle from "../hooks/use-document-title";
+import useKeyDown from "../hooks/use-event-keydown";
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
@@ -18,21 +21,28 @@ const items = [
 const Game = () => {
   const [numCookies, setNumCookies] = React.useState(10);
 
-  //Add a custom title with useEffect
-  React.useEffect(() => {
-    document.title = `${numCookies} ${numCookies === 1 ? 'cookie' : 'cookies'} - Cookie Clicker Workshop`;
-
-    return () => {
-      document.title = `Cookie Clicker Workshop`;
-    };
-  }, [numCookies]);
-
   const [purchasedItems, setPurchasedItems] = React.useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
     factory: 0,
   });
+
+  const addCookies = () => {
+    setNumCookies((numCookies) => numCookies + 1)
+  };
+
+  //Add a custom title with useEffect
+  useDocumentTitle({
+    title: `${numCookies} ${numCookies === 1 ? 'cookie' : 'cookies'} - Cookie Clicker Workshop`,
+    fallbackTitle: "Cookie Clicker Workshop",
+  });
+
+  //Add a global event listener
+  useKeyDown({
+    pressedKey: "Space",
+    callbackFunction: addCookies,
+  })
 
   const calculateCookiesPerTick = (purchasedItems) => {
     // console.log(Object.keys(purchasedItems))
@@ -58,7 +68,7 @@ const Game = () => {
           <strong>{calculateCookiesPerTick(purchasedItems)}</strong> {calculateCookiesPerTick(purchasedItems) === 1 ? 'cookie' : 'cookies'} per second
         </Indicator>
         <Button
-          onClick={() => setNumCookies(numCookies + 1)}
+          onClick={() => addCookies}
         >
           <Cookie src={cookieSrc} />
         </Button>
