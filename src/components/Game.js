@@ -6,6 +6,8 @@ import cookieSrc, { ReactComponent } from "../cookie.svg";
 import Item from "./Item";
 
 import useInterval from "../hooks/use-interval.hook";
+import useKeydown from "../hooks/use-keydown.hook";
+import useDocumentTitle from "../hooks/use-documentTitle.hook";
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
@@ -21,28 +23,13 @@ const Game = () => {
     farm: 0,
   });
 
-  React.useEffect(() => {
-    document.title = `${numCookies} cookies - Cookie Clicker`;
-
-    return () => {
-      document.title = `Cookie Clicker`;
-    };
-  }, [numCookies]);
-
-  React.useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  });
-
-  const handleKeyDown = (ev) => {
-    if (ev.code === "Space") {
-      ev.preventDefault();
-      setNumCookies(numCookies + 1);
-    }
+  const addCookie = () => {
+    setNumCookies(numCookies + 1);
   };
+
+  useDocumentTitle(`${numCookies} cookies - Cookie Clicker`, `Cookie Clicker`);
+
+  useKeydown("Space", addCookie);
 
   const purchaseItem = (item) => {
     if (numCookies < item.cost) {
