@@ -18,6 +18,15 @@ const items = [
 const Game = () => {
   const [numCookies, setNumCookies] = React.useState(10);
 
+  //Add a custom title with useEffect
+  React.useEffect(() => {
+    document.title = `${numCookies} ${numCookies === 1 ? 'cookie' : 'cookies'} - Cookie Clicker Workshop`;
+
+    return () => {
+      document.title = `Cookie Clicker Workshop`;
+    };
+  }, [numCookies]);
+
   const [purchasedItems, setPurchasedItems] = React.useState({
     cursor: 0,
     grandma: 0,
@@ -26,7 +35,7 @@ const Game = () => {
   });
 
   const calculateCookiesPerTick = (purchasedItems) => {
-    console.log(Object.keys(purchasedItems))
+    // console.log(Object.keys(purchasedItems))
     return Object.keys(purchasedItems).reduce((accumulator, currentValue) => {
       let numOwned = purchasedItems[currentValue];
       let item = items.find((item) => item.id === currentValue);
@@ -65,7 +74,7 @@ const Game = () => {
               value={item.value}
               numOwned={purchasedItems[item.id]}
               handleClick={() => {
-                console.log(purchasedItems[item.id])
+                // console.log(purchasedItems[item.id])
                 if (numCookies < item.cost) {
                   alert("You don't have enought cookies!");
                   return;
