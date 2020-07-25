@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 import Item from './Item';
+import useInterval from '../hooks/use-interval.hook'
 
 import cookieSrc from "../cookie.svg";
 
@@ -12,29 +13,39 @@ const items = [
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
 
-function handleClick(numCookies, item, purchasedItems) {
-  console.log(item.id)
-  let itemName = item.id;
-  if (numCookies > item.cost) {
-    numCookies -= item.cost;
-    const updatedPurchasedItems = {
-      ...purchasedItems,
-      itemName: purchasedItems[item.id]++
-    }
-    return updatedPurchasedItems
-  } else {
-    //window.alert('Not enough cookies to buy this upgrade')
-    return;
-  }
+
+function calculateCookiesPerTick(purchasedItems) {
+  // initialize generated cookies
+  let cookies = 0;
+  // loop through purchased items object
+  Object.keys(purchasedItems).forEach(item => {
+    // check each items
+    items.forEach(dataItem => {
+      // verify the value
+      if (dataItem.id === item && purchasedItems[item] > 0) {
+        // add value
+        cookies += dataItem.value
+      }
+    })
+  })
+  // return value
+  return cookies
 }
 
 const Game = () => {
+  // initialize state of cookies
   const [numCookies, setCookies] = React.useState(100);
+  // initialize state for items
   const [purchasedItems, setPurchasedItems] = React.useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
   });
+  // given interval in folder hooks
+  useInterval(() => {
+    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems)
+    setCookies(numCookies + numOfGeneratedCookies)
+  }, 1000)
 
   return (
     <Wrapper>
