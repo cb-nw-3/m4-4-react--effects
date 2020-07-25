@@ -42,7 +42,7 @@ const Game = () => {
     setNumCookies(numCookies + numOfGeneratedCookies);
   }, 1000);
 
-  // ####################### UPDATE DOCUMENT TITLE ##################
+  // ####################### REACT EFFECTS ##################
 
   //parseFloat() and .toLocaleString('en') converts number to string format
   //with comma seperation by thousands
@@ -52,6 +52,20 @@ const Game = () => {
     )} - Cookie Clicker Workshop`;
     return () => {
       document.title = "Cookie Clicker Workshop";
+    };
+  });
+
+  //add cookies using spacebar
+  function handleKeydown(event) {
+    if (event.code === "Space") {
+      setNumCookies(numCookies + 1);
+    }
+  }
+
+  React.useEffect((event) => {
+    window.addEventListener("keydown", handleKeydown);
+    return () => {
+      window.removeEventListener("keydown", handleKeydown);
     };
   });
 
