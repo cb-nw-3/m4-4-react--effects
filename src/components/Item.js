@@ -10,13 +10,24 @@ const Item = ({ item, numOwned, handleClick, focusOnLoad }) => {
     }
   }, []);
 
+  let description = "descriptionMissing";
+
+  switch (item.type) {
+    case "cps":
+      description = `Produces: ${item.value} cookie(s)/second.`;
+      break;
+    case "cursor":
+      description = `Adds 1 cookie per click.`;
+      break;
+  }
+
   return (
     <Wrapper onClick={handleClick} ref={buttonRef}>
       <div>
         <Title>{item.name}</Title>
         <Description>
           <span>Cost: {item.cost} cookie(s). </span>
-          <span>Produces: {item.value} cookie(s)/second. </span>
+          <span>{description} </span>
         </Description>
       </div>
       <Amount>{numOwned}</Amount>

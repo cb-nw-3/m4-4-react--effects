@@ -10,9 +10,16 @@ import useKeydown from "../hooks/use-keydown.hook";
 import useDocumentTitle from "../hooks/use-documentTitle.hook";
 
 const items = [
-  { id: "cursor", name: "Cursor", cost: 10, value: 1 },
-  { id: "grandma", name: "Grandma", cost: 100, value: 10 },
-  { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  { id: "cursor", name: "Cursor", cost: 10, value: 1, type: "cps" },
+  { id: "grandma", name: "Grandma", cost: 100, value: 10, type: "cps" },
+  { id: "farm", name: "Farm", cost: 1000, value: 80, type: "cps" },
+  {
+    id: "megaCursor",
+    name: "Mega Cursor",
+    cost: 50,
+    value: 0,
+    type: "cursor",
+  },
 ];
 
 const Game = () => {
@@ -21,10 +28,16 @@ const Game = () => {
     cursor: 0,
     grandma: 0,
     farm: 0,
+    megaCursor: 0,
   });
+  let cookiesPerClick = 1;
 
   const addCookie = () => {
-    setNumCookies(numCookies + 1);
+    setNumCookies(numCookies + cookiesPerClick);
+  };
+
+  const enhanceCursor = () => {
+    cookiesPerClick = purchasedItems.megaCursor + 1;
   };
 
   useDocumentTitle(`${numCookies} cookies - Cookie Clicker`, `Cookie Clicker`);
@@ -40,7 +53,6 @@ const Game = () => {
         ...purchasedItems,
         [item.id]: purchasedItems[item.id] + 1,
       });
-
       calculateCookiesPerSec(purchasedItems);
     }
   };
@@ -48,10 +60,13 @@ const Game = () => {
   const calculateCookiesPerSec = (purchasedItems) => {
     let numOfGeneratedCookies = 0;
 
+    enhanceCursor();
+
     items.forEach((item) => {
       numOfGeneratedCookies =
         numOfGeneratedCookies + purchasedItems[item.id] * item.value;
     });
+
     return numOfGeneratedCookies;
   };
 
@@ -69,10 +84,7 @@ const Game = () => {
           second
         </Indicator>
         <Button>
-          <Cookie
-            src={cookieSrc}
-            onClick={() => setNumCookies(numCookies + 1)}
-          />
+          <Cookie src={cookieSrc} onClick={addCookie} />
         </Button>
       </GameArea>
 
