@@ -15,6 +15,7 @@ const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  { id: "megacursor", name: "Extra Cookie per Click", cost: 2500, value: 0 },
 ];
 
 const Game = () => {
@@ -25,6 +26,7 @@ const Game = () => {
     cursor: 0,
     grandma: 0,
     farm: 0,
+    megacursor: 0,
   });
 
   // ################# UPDATE COOKIE GENERATION ######################
@@ -58,9 +60,18 @@ const Game = () => {
   });
 
   //this is the custom hook to add cookies by pressing down on space
+  const rate = 1 + purchasedItems.megacursor;
+
   function addCookie() {
-    setNumCookies(numCookies + 1);
+    console.log(rate);
+    rate === 0
+      ? setNumCookies(numCookies + 1)
+      : setNumCookies(numCookies + rate);
   }
+
+  React.useEffect(() => {
+    console.log(`Current click rate is ${rate}`);
+  }, [rate]);
 
   useKeydown("Space", addCookie);
 
@@ -75,7 +86,7 @@ const Game = () => {
           <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per
           second
         </Indicator>
-        <Button onClick={() => setNumCookies(numCookies + 1)}>
+        <Button onClick={() => addCookie()}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
@@ -130,6 +141,10 @@ const Button = styled.button`
 
 const Cookie = styled.img`
   width: 200px;
+
+  &:active {
+    transform: scale(1.1);
+  }
 `;
 
 const ItemArea = styled.div`
