@@ -12,14 +12,29 @@ const items = [
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
 
+function handleClick(numCookies, item, purchasedItems) {
+  console.log(item.id)
+  let itemName = item.id;
+  if (numCookies > item.cost) {
+    numCookies -= item.cost;
+    const updatedPurchasedItems = {
+      ...purchasedItems,
+      itemName: purchasedItems[item.id]++
+    }
+    return updatedPurchasedItems
+  } else {
+    //window.alert('Not enough cookies to buy this upgrade')
+    return;
+  }
+}
+
 const Game = () => {
-  // TODO: Replace this with React state!
-  const numCookies = 100;
-  const purchasedItems = {
+  const [numCookies, setCookies] = React.useState(100);
+  const [purchasedItems, setPurchasedItems] = React.useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
-  };
+  });
 
   return (
     <Wrapper>
@@ -29,7 +44,7 @@ const Game = () => {
           {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>0</strong> cookies per second
         </Indicator>
-        <Button>
+        <Button onClick={() => setCookies(numCookies + 1)}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
@@ -40,7 +55,23 @@ const Game = () => {
           return <Item 
             item={item} 
             numOwned={purchasedItems[item.id]} 
-            handleClick={item}
+            // function in props for onClick in the item
+            handleClick={() => {
+              // check if you have enough cookies
+              if (numCookies > item.cost) {
+                // update state of cookies
+                setCookies(numCookies - item.cost);
+                // update state of items
+                setPurchasedItems({
+                  ...purchasedItems,
+                  [item.id]: purchasedItems[item.id] + 1
+                })
+              } else {
+                window.alert('Not enough cookies to buy this upgrade')
+                return;
+              }
+            }}
+            cookies={numCookies}
             key={item.id}></Item>
         })}
       </ItemArea>

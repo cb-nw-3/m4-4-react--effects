@@ -3,16 +3,17 @@ import React from 'react';
 import styled from 'styled-components';
 
 function Item(props) {
-  console.log(props)
-  return <NameContainer>
-      <div>
+  return <NameContainer onClick={props.handleClick}>
+      <Left>
         <Name>{props.item.name}</Name>
         <Info>Cost: {props.item.cost} cookie(s) Produce: {props.item.value} cookies/second</Info>
-      </div>
+      </Left>
       <Count>{props.numOwned}</Count>
     </NameContainer>
 }
 
+const Left = styled.div`
+`
 const Name = styled.p`
   color: lightgray;
   width: 350px;
@@ -21,9 +22,13 @@ const Name = styled.p`
   font-size: 20px;
   margin-top: 5px;
 `
-const NameContainer = styled.div`
+const NameContainer = styled.button`
   display: flex;
+  border: none;
   border-bottom: 2px solid gray;
+  text-align: left;
+  background: #222;
+  padding-left: 0;
 `
 const Info = styled.p`
   color: gray;
