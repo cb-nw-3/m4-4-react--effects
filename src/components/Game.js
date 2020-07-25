@@ -7,7 +7,7 @@ import useKeydown from "../hooks/useKeydown.hook";
 import useDocumentTitle from "../hooks/useDocumentTitle.hook";
 import cookieSrc from "../cookie.svg";
 
-const items = [
+const itemsArray = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1, type: "tick" },
   { id: "grandma", name: "Grandma", cost: 100, value: 10, type: "tick" },
   { id: "farm", name: "Farm", cost: 1000, value: 80, type: "tick" },
@@ -24,6 +24,7 @@ const Game = () => {
     megacursor: 0,
   });
   const [cookiesPerClick, setCookiesPerClick] = React.useState(1);
+  const [items, setItems] = React.useState(itemsArray);
 
   const calculateCookiesPerTick = (listOfItems) => {
     let total = 0;
@@ -44,7 +45,7 @@ const Game = () => {
   };
 
   const addOneCookie = () => {
-    setNumCookies(numCookies + 1);
+    setNumCookies(numCookies + cookiesPerClick);
   };
 
   useInterval(() => {
@@ -71,7 +72,8 @@ const Game = () => {
           second
         </Indicator>
         <Button
-          onClick={() => {
+          onClick={(event) => {
+            event.preventDefault();
             setNumCookies(numCookies + cookiesPerClick);
           }}
         >
@@ -105,6 +107,15 @@ const Game = () => {
                     [item.id]: purchasedItems[`${item.id}`] + 1,
                   };
                   setPurchasedItems(updatedObject);
+                  const newItemsArray = items.map((item, index2) => {
+                    if (index2 === index) {
+                      item.cost = Math.round(item.cost * 1.25);
+                      return item;
+                    } else {
+                      return item;
+                    }
+                  });
+                  setItems(newItemsArray);
                 }
               }}
             ></Item>
