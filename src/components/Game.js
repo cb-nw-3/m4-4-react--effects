@@ -57,14 +57,11 @@ const Game = () => {
     farm: 0,
     megaCursor: 0,
   });
-  let cookiesPerClick = 1;
+
+  const cookiesPerClick = purchasedItems.megaCursor + 1;
 
   const addCookie = () => {
     setNumCookies(numCookies + cookiesPerClick);
-  };
-
-  const enhanceCursor = () => {
-    cookiesPerClick = purchasedItems.megaCursor + 1;
   };
 
   const setPrices = (array) => {
@@ -99,8 +96,6 @@ const Game = () => {
   const calculateCookiesPerSec = (purchasedItems) => {
     let numOfGeneratedCookies = 0;
 
-    enhanceCursor();
-
     items.forEach((item) => {
       numOfGeneratedCookies =
         numOfGeneratedCookies + purchasedItems[item.id] * item.value;
@@ -120,7 +115,9 @@ const Game = () => {
         <Indicator>
           <Total>{numCookies} cookies</Total>
           <strong>{calculateCookiesPerSec(purchasedItems)}</strong>{" "}
-          {cookiesPerClick === 1 ? "cookie per second" : "cookies per second"}
+          {calculateCookiesPerSec(purchasedItems) === 1
+            ? "cookie per second"
+            : "cookies per second"}
           <div>
             <strong>{cookiesPerClick}</strong>{" "}
             {cookiesPerClick === 1 ? "cookie per click" : "cookies per click"}
