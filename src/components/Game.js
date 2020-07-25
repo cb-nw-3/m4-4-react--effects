@@ -108,6 +108,11 @@ const Game = () => {
               if (numCookies >= item.cost) {
                 setNumCookies(numCookies - item.cost);
                 purchasedItems[item.id] += 1; //update prop value
+
+                //update the cost of the item at every purchase
+                item.cost += Math.floor(Math.random() * 0.2 * item.cost);
+                // console.log(`${item.name} now costs ${item.cost}`);
+
                 setPurchasedItems({ ...purchasedItems }); //update state
               } else {
                 window.alert(`Cannot afford ${item.name}!`);
