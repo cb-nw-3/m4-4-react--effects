@@ -5,11 +5,12 @@ const Item = ({ name, cost, value, numOwned, handleClick, index }) => {
   //this is to focus on the first item only
   const firstItem = React.createRef();
 
+  //does not need to re-run after ever render, hence the [] as the 2nd argument
   React.useEffect(() => {
     if (index === 0) {
       firstItem.current.focus();
     }
-  });
+  }, []);
 
   return (
     <Wrapper ref={firstItem} onClick={handleClick}>
