@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Item from './Item';
@@ -19,8 +19,9 @@ const Game = () => {
     grandma: 0,
     farm: 0,
   });
+
   useInterval(() => {
-    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
+    calculateCookiesPerTick(purchasedItems);
 
     // Add his number of cookies to the total
   }, 1000);
@@ -32,6 +33,10 @@ const Game = () => {
     const additionalCookies = items.reduce(reducer, initialValue);
     setNumCookies(numCookies + additionalCookies);
   };
+
+  useEffect(() => {
+    document.title = `${numCookies} cookies - Cookie Clicker Workshop`;
+  }, [numCookies]);
   return (
     <Wrapper>
       <GameArea>
