@@ -81,7 +81,9 @@ const Game = () => {
             <Item
               key={item.id}
               name={item.name}
-              numOwned={purchasedItems}
+              cost={item.cost}
+              value={item.value}
+              numOwned={purchasedItems[item.id]}
               items={items}
               handleClick={() => {
                 //console.log("click");
