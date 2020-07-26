@@ -49,7 +49,7 @@ const Game = () => {
 
   }, 1000)
   // tab title update
-  useRefreshTabTitle({title: `${numCookies} cookies - Cookie Clicker`})
+  useRefreshTabTitle(`${numCookies} cookies - Cookie Clicker`)
 
   return (
     <Wrapper>
