@@ -41,8 +41,24 @@ const Game = () => {
     setNumCookies(numCookies + numOfGeneratedCookies);
   }, 1000);
 
+  //tab title
   React.useEffect(() => {
     document.title = `${numCookies} cookies - Cookie Clicker Workshop`;
+  }, numCookies);
+
+  //spacebar
+  const handleKeyPress = (ev) => {
+    if (ev.key === "Space") {
+      setNumCookies(numCookies + 1);
+    }
+  };
+
+  React.useEffect(() => {
+    window.addEventListener("keyPress", handleKeyPress);
+
+    return () => {
+      window.removeEventListener("keyPress", handleKeyPress);
+    };
   }, numCookies);
 
   return (
