@@ -25,8 +25,12 @@ const Game = () => {
     // Add his number of cookies to the total
   }, 1000);
 
-  const calculateCookiesPerTick = () => {
-    setNumCookies(numCookies + 1);
+  const calculateCookiesPerTick = (purchasedItems) => {
+    let initialValue = 0;
+    const reducer = (accumulator, current) =>
+      accumulator + current.value * purchasedItems[current.id];
+    const additionalCookies = items.reduce(reducer, initialValue);
+    setNumCookies(numCookies + additionalCookies);
   };
   return (
     <Wrapper>
