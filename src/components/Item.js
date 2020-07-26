@@ -18,19 +18,22 @@ const ItemNum = styled.div`
     font-size: 30px;
 `
 
-const Item = (props) => {
-    console.log(props.data);
+const Item = ({ itemData, purchasedItems }) => {
     return (
-        <Wrapper>
-            <ItemDesc>
-                <h1>{props.data.name}</h1>
-                <p>Cost: {props.data.cost} cookie(s). Produces {props.data.value} cookies/second.</p>
-            </ItemDesc>
-            <ItemNum>
-                SomeNum
-            </ItemNum>
-        </Wrapper>
+        itemData.map(item => {
+            return (
+                <Wrapper>
+                    < ItemDesc >
+                        <h1>{item.name}</h1>
+                        <p>Cost: {item.cost} cookie(s). Produces {item.value} cookies/second.</p>
+                    </ItemDesc >
+                    <ItemNum>
+                        {purchasedItems[item.id]}
+                    </ItemNum>
+                </Wrapper>
+            )
+        })
     )
-};
+}
 
 export default Item;

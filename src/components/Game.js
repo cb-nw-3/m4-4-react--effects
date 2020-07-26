@@ -20,8 +20,6 @@ const Game = () => {
     farm: 0,
   };
 
-  console.log(items[0]);
-
   return (
     <Wrapper>
       <GameArea>
@@ -30,7 +28,8 @@ const Game = () => {
           {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>0</strong> cookies per second
         </Indicator>
-        <Button>
+        {/* TODO-RL: onclick to be added to button tag */}
+        <Button onClick={console.log("what")}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
@@ -38,10 +37,10 @@ const Game = () => {
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
         {/* TODO: Add <Item> instances here, 1 for each item type. */}
-        <Item data={items[0]} />
+        <Item itemData={items} purchasedItems={purchasedItems} />
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
-    </Wrapper>
+    </Wrapper >
   );
 };
 
