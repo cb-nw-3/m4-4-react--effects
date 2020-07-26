@@ -44,7 +44,7 @@ const Game = () => {
   //tab title
   React.useEffect(() => {
     document.title = `${numCookies} cookies - Cookie Clicker Workshop`;
-  }, numCookies);
+  }, [numCookies]);
 
   //spacebar
   const handleKeyPress = (ev) => {
@@ -59,7 +59,7 @@ const Game = () => {
     return () => {
       window.removeEventListener("keyPress", handleKeyPress);
     };
-  }, numCookies);
+  });
 
   return (
     <Wrapper>
@@ -82,6 +82,7 @@ const Game = () => {
               key={item.id}
               name={item.name}
               numOwned={purchasedItems}
+              items={items}
               handleClick={() => {
                 //console.log("click");
                 if (item.cost > numCookies) {
