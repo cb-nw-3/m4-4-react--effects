@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-const Item = ({ name }) => {
-    return <button>{name}</button>;
+const Item = ({ name, numOwned, handleClick }) => {
+    return <button onClick={handleClick}>{name}</button>;
 
 };
 
