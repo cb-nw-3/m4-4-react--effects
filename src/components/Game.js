@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import cookieSrc from "../cookie.svg";
 import Item from "./Item";
 import useInterval from "../hooks/use-interval.hook";
+import useKeydown from "../hooks/useKeydown";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
@@ -41,10 +43,10 @@ const Game = () => {
     setNumCookies(numCookies + numOfGeneratedCookies);
   }, 1000);
 
-  //tab title
-  React.useEffect(() => {
-    document.title = `${numCookies} cookies - Cookie Clicker Workshop`;
-  }, [numCookies]);
+  useDocumentTitle(
+    `${numCookies} cookies - Cookie Clicker Workshop`,
+    "Cookie Clicker Workshop"
+  );
 
   //spacebar
   const handleKeyPress = (ev) => {
