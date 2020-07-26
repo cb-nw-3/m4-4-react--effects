@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import Item from "./Item";
 
 import cookieSrc from "../cookie.svg";
 
@@ -9,6 +10,11 @@ const items = [
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
+let numOwned = 0;
+
+function handleClick(item) {
+  console.log(item);
+}
 
 const Game = () => {
   // TODO: Replace this with React state!
@@ -34,7 +40,15 @@ const Game = () => {
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {/* TODO: Add <Item> instances here, 1 for each item type. */}
+        {items.map((element) => {
+          return (
+            <Item
+              item={element}
+              numOwned={numOwned}
+              handleClick={handleClick}
+            />
+          );
+        })}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
@@ -44,9 +58,11 @@ const Game = () => {
 const Wrapper = styled.div`
   display: flex;
   height: 100vh;
+  width: 95%;
+  margin: 0 auto;
 `;
 const GameArea = styled.div`
-  flex: 1;
+  flex: 4;
   display: grid;
   place-items: center;
 `;
@@ -66,6 +82,7 @@ const ItemArea = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  flex: 3;
 `;
 
 const SectionTitle = styled.h3`

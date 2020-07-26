@@ -4,12 +4,12 @@ At the top of our `Game` component, we have two static pieces of data:
 
 ```js
 // TODO: Replace this with React state!
-const numCookies = 100
+const numCookies = 100;
 const purchasedItems = {
   cursor: 0,
   grandma: 0,
   farm: 0,
-}
+};
 ```
 
 We want this data to be _dynamic_, so we'll need to use React state via a `useState` hook.
