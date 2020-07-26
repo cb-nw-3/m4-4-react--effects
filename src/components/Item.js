@@ -3,10 +3,18 @@ import React from 'react';
 import styled from 'styled-components';
 
 function Item(props) {
+  console.log(props)
   return <NameContainer onClick={props.handleClick}>
       <Left>
         <Name>{props.item.name}</Name>
-        <Info>Cost: {props.item.cost} cookie(s) Produce: {props.item.value} cookies/second</Info>
+        <Info>
+          Cost: {props.item.cost} cookie(s) 
+          Produce: {
+            props.purchasedItems[props.item.id] === 0 ? 
+            props.item.value : 
+            props.purchasedItems[props.item.id] * props.item.value
+          } cookies/second
+        </Info>
       </Left>
       <Count>{props.numOwned}</Count>
     </NameContainer>

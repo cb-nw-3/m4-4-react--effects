@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 import Item from './Item';
-import useInterval from '../hooks/use-interval.hook'
+import useInterval from '../hooks/use-interval.hook';
+import useRefreshTabTitle from '../hooks/use-updateTabTitle.hook';
 
 import cookieSrc from "../cookie.svg";
 
@@ -12,7 +13,6 @@ const items = [
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
-
 
 function calculateCookiesPerTick(purchasedItems) {
   // initialize generated cookies
@@ -24,7 +24,7 @@ function calculateCookiesPerTick(purchasedItems) {
       // verify the value
       if (dataItem.id === item && purchasedItems[item] > 0) {
         // add value
-        cookies += dataItem.value
+        cookies += dataItem.value * purchasedItems[item]
       }
     })
   })
@@ -44,8 +44,12 @@ const Game = () => {
   // given interval in folder hooks
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems)
+
     setCookies(numCookies + numOfGeneratedCookies)
+
   }, 1000)
+  // tab title update
+  useRefreshTabTitle({title: `${numCookies} cookies - Cookie Clicker`})
 
   return (
     <Wrapper>
@@ -53,7 +57,7 @@ const Game = () => {
         <Indicator>
           <Total>{numCookies} cookies</Total>
           {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>0</strong> cookies per second
+          <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per second
         </Indicator>
         <Button onClick={() => setCookies(numCookies + 1)}>
           <Cookie src={cookieSrc} />
@@ -64,12 +68,13 @@ const Game = () => {
         <SectionTitle>Items:</SectionTitle>
         {items.map(item => {
           return <Item 
-            item={item} 
+            item={item}
+            purchasedItems={purchasedItems}
             numOwned={purchasedItems[item.id]} 
             // function in props for onClick in the item
             handleClick={() => {
               // check if you have enough cookies
-              if (numCookies > item.cost) {
+              if (numCookies >= item.cost) {
                 // update state of cookies
                 setCookies(numCookies - item.cost);
                 // update state of items
