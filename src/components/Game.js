@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Item from './Item';
 import useInterval from '../hooks/use-interval.hook';
 import useRefreshTabTitle from '../hooks/use-updateTabTitle.hook';
+import useSpaceBar from '../hooks/use-spacebar.hook';
 
 import cookieSrc from "../cookie.svg";
 
@@ -41,15 +42,22 @@ const Game = () => {
     grandma: 0,
     farm: 0,
   });
+  // create callback function for the spacebar function that increases cookies by 1
+  function incrementWithSpace() {
+    setCookies(numCookies + 1);
+  }
+
   // given interval in folder hooks
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems)
-
+    // increase amount of cookies depending on items
     setCookies(numCookies + numOfGeneratedCookies)
-
   }, 1000)
+
   // tab title update
-  useRefreshTabTitle(`${numCookies} cookies - Cookie Clicker`)
+  useRefreshTabTitle(`${numCookies} cookies - Cookie Clicker`);
+  // spacebar utility hook 
+  useSpaceBar('Space', incrementWithSpace)
 
   return (
     <Wrapper>
@@ -118,6 +126,7 @@ const Cookie = styled.img`
 const ItemArea = styled.div`
   height: 100%;
   padding-right: 20px;
+  margin-right: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
