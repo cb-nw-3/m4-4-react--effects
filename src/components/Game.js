@@ -36,7 +36,24 @@ const Game = () => {
 
   useEffect(() => {
     document.title = `${numCookies} cookies - Cookie Clicker Workshop`;
+    return () => {
+      document.title = `Cookie Clicker Workshop`;
+      //This really does not make any difference in this case
+    };
   }, [numCookies]);
+
+  useEffect(() => {
+    function handleKeydown(e) {
+      if (e.code === 'Space') {
+        setNumCookies(numCookies + 1);
+      }
+    }
+    window.addEventListener('keydown', handleKeydown);
+    return () => {
+      window.removeEventListener('keydown', handleKeydown);
+    };
+  }, [numCookies]);
+
   return (
     <Wrapper>
       <GameArea>
