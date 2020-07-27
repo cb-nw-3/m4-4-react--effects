@@ -49,19 +49,7 @@ const Game = () => {
   );
 
   //spacebar
-  const handleKeyPress = (ev) => {
-    if (ev.key === "Space") {
-      setNumCookies(numCookies + 1);
-    }
-  };
-
-  React.useEffect(() => {
-    window.addEventListener("keyPress", handleKeyPress);
-
-    return () => {
-      window.removeEventListener("keyPress", handleKeyPress);
-    };
-  });
+  useKeydown("Space", incrementCookies);
 
   return (
     <Wrapper>
