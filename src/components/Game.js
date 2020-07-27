@@ -51,14 +51,14 @@ const Game = () => {
   useEffect(() => {
     function handleKeydown(e) {
       if (e.code === 'Space') {
-        setNumCookies(numCookies + 1);
+        setNumCookies((n) => n + 1);
       }
     }
     window.addEventListener('keydown', handleKeydown);
     return () => {
       window.removeEventListener('keydown', handleKeydown);
     };
-  }, [numCookies]);
+  }, []);
 
   return (
     <Wrapper>
@@ -70,7 +70,7 @@ const Game = () => {
         </Indicator>
         <Button
           onClick={() => {
-            setNumCookies(numCookies + 1);
+            setNumCookies((n) => n + 1);
           }}
         >
           <Cookie src={cookieSrc} />
