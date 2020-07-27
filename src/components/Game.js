@@ -12,10 +12,10 @@ import useDocumentTitle from "../hooks/use-document-title";
 import useKeyDown from "../hooks/use-event-keydown";
 
 const items = [
-  { id: "cursor", name: "Cursor", value: 1 },
-  { id: "grandma", name: "Grandma", value: 5 },
-  { id: "farm", name: "Farm", value: 40 },
-  { id: "factory", name: "Factory", value: 100 },
+  { id: "cursor", name: "Cursor", value: 0.2 },
+  { id: "grandma", name: "Grandma", value: 1 },
+  { id: "farm", name: "Farm", value: 2.5 },
+  { id: "factory", name: "Factory", value: 5 },
 ];
 
 const Game = () => {
@@ -24,8 +24,8 @@ const Game = () => {
   const [cost, setCost] = React.useState({
     cursor: 10,
     grandma: 100,
-    farm: 1000,
-    factory: 5000,
+    farm: 500,
+    factory: 2500,
   });
 
   const [purchasedItems, setPurchasedItems] = React.useState({
@@ -41,7 +41,7 @@ const Game = () => {
 
   //Add a custom title with useEffect
   useDocumentTitle({
-    title: `${numCookies} ${numCookies === 1 ? 'cookie' : 'cookies'} - Cookie Clicker Workshop`,
+    title: `${Math.round(numCookies * 10) / 10} ${numCookies === 1 ? 'cookie' : 'cookies'} - Cookie Clicker Workshop`,
     fallbackTitle: "Cookie Clicker Workshop",
   });
 
@@ -71,8 +71,8 @@ const Game = () => {
     <Wrapper>
       <GameArea>
         <Indicator>
-          <Total>{numCookies} {numCookies === 1 ? 'cookie' : 'cookies'}</Total>
-          <strong>{calculateCookiesPerTick(purchasedItems)}</strong> {calculateCookiesPerTick(purchasedItems) === 1 ? 'cookie' : 'cookies'} per second
+          <Total>{Math.round(numCookies * 10) / 10} {numCookies === 1 ? 'cookie' : 'cookies'}</Total>
+          <strong>{Math.round(calculateCookiesPerTick(purchasedItems) * 10) / 10}</strong> {calculateCookiesPerTick(purchasedItems) === 1 ? 'cookie' : 'cookies'} per second
         </Indicator>
         <Button
           onClick={() => addCookies()}
