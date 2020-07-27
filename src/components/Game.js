@@ -95,6 +95,7 @@ const Game = () => {
                   ...purchasedItems,
                   [item.id]: purchasedItems[item.id] + 1
                 })
+                item.cost = Math.floor(item.cost * 1.1);
               } else {
                 window.alert('Not enough cookies to buy this upgrade')
                 return;
