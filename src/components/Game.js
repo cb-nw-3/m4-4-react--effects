@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import Item from "./Item.js";
+import useInterval from "../hooks/use-interval.hook";
 
 import cookieSrc from "../cookie.svg";
 
@@ -10,13 +12,28 @@ const items = [
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
 
+const handleClick = (numCookies, cost) => {
+  console.log(numCookies);
+  console.log(cost);
+};
+
 const Game = () => {
+  useInterval(() => {
+    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
+
+    // Add this number of cookies to the total
+  }, 1000);
+
   // TODO: Replace this with React state!
-  const numCookies = 100;
-  const purchasedItems = {
+  const [numCookies, SetnumCookies] = useState(100);
+  const [purchasedItems, SetpurchasedItems] = useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
+  });
+
+  const increasePoints = () => {
+    SetnumCookies(numCookies + 1);
   };
 
   return (
@@ -27,14 +44,36 @@ const Game = () => {
           {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>0</strong> cookies per second
         </Indicator>
-        <Button>
+        <Button onClick={increasePoints}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {/* TODO: Add <Item> instances here, 1 for each item type. */}
+        {items.map((item, index) => {
+          return (
+            <Item
+              key={index}
+              id={item.id}
+              name={item.name}
+              cost={item.cost}
+              value={item.value}
+              numOwned={purchasedItems}
+              handleClick={() => {
+                if (item.cost > numCookies) {
+                  console.log("nah");
+                } else {
+                  SetnumCookies(numCookies - item.cost);
+                  SetpurchasedItems({
+                    ...purchasedItems,
+                    [item.id]: purchasedItems[item.id] + 1,
+                  });
+                }
+              }}
+            ></Item>
+          );
+        })}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
