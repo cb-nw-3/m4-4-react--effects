@@ -3,14 +3,15 @@ import React from 'react';
 import styled from 'styled-components';
 
 function Item(props) {
+  // different constants for conditions
   const amountOfItems = props.purchasedItems[props.item.id];
   const itemDefaultValue = props.item.value;
   const itemValue = props.purchasedItems[props.item.id] * props.item.value;
-
+  // reference for focus on mount
   const firstItem = React.useRef(null);
-
+  // variable for different item render
   let infoSection;
-
+  // check if item is megaclick or not
   if (props.item.id !== 'megaClick') {
     infoSection = <Info>
       Cost: {props.item.cost} cookie(s) 
@@ -22,7 +23,7 @@ function Item(props) {
       Modification: {amountOfItems === 0 ? 1 : amountOfItems} X click
     </Info>
   }
-
+  // focus the first item after each render
   React.useEffect(() => {
     if (props.firstItem === 'cursor') {
       firstItem.current.focus();
