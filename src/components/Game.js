@@ -2,41 +2,120 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
+import Item from "./Item";
+
 import cookieSrc from "../cookie.svg";
 
+//hooks
+import useInterval from "../../src/hooks/use-interval.hook";
+import useDocumentTitle from "../hooks/use-document-title";
+import useKeyDown from "../hooks/use-event-keydown";
+
 const items = [
-  { id: "cursor", name: "Cursor", cost: 10, value: 1 },
-  { id: "grandma", name: "Grandma", cost: 100, value: 10 },
-  { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  { id: "cursor", name: "Cursor", value: 0.2 },
+  { id: "grandma", name: "Grandma", value: 1 },
+  { id: "farm", name: "Farm", value: 2.5 },
+  { id: "factory", name: "Factory", value: 5 },
 ];
 
 const Game = () => {
-  // TODO: Replace this with React state!
-  const numCookies = 100;
-  const purchasedItems = {
+  const [numCookies, setNumCookies] = React.useState(10);
+
+  const [cost, setCost] = React.useState({
+    cursor: 10,
+    grandma: 100,
+    farm: 500,
+    factory: 2500,
+  });
+
+  const [purchasedItems, setPurchasedItems] = React.useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
+    factory: 0,
+  });
+
+  const addCookies = () => {
+    setNumCookies((numCookies) => numCookies + 1)
   };
 
+  //Add a custom title with useEffect
+  useDocumentTitle({
+    title: `${Math.round(numCookies * 10) / 10} ${numCookies === 1 ? 'cookie' : 'cookies'} - Cookie Clicker Workshop`,
+    fallbackTitle: "Cookie Clicker Workshop",
+  });
+
+  //Add a global event listener
+  useKeyDown({
+    pressedKey: "Space",
+    callbackFunction: addCookies,
+  })
+
+  const calculateCookiesPerTick = (purchasedItems) => {
+    // console.log(Object.keys(purchasedItems))
+    return Object.keys(purchasedItems).reduce((accumulator, currentValue) => {
+      let numOwned = purchasedItems[currentValue];
+      let item = items.find((item) => item.id === currentValue);
+      let value = item.value;
+
+      return accumulator + value * numOwned;
+    }, 0);
+  }
+
+  useInterval(() => {
+    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems)
+
+    setNumCookies(numCookies + numOfGeneratedCookies);
+  }, 1000)
   return (
     <Wrapper>
       <GameArea>
         <Indicator>
-          <Total>{numCookies} cookies</Total>
-          {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>0</strong> cookies per second
+          <Total>{Math.round(numCookies * 10) / 10} {numCookies === 1 ? 'cookie' : 'cookies'}</Total>
+          <strong>{Math.round(calculateCookiesPerTick(purchasedItems) * 10) / 10}</strong> {calculateCookiesPerTick(purchasedItems) === 1 ? 'cookie' : 'cookies'} per second
         </Indicator>
-        <Button>
+        <Button
+          onClick={() => addCookies()}
+        >
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
-
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {/* TODO: Add <Item> instances here, 1 for each item type. */}
+        {items.map((item, index) => {
+          return (
+            <Item
+              index={index}
+              key={item.id}
+              name={item.name}
+              cost={cost[item.id]}
+              value={item.value}
+              numOwned={purchasedItems[item.id]}
+              handleClick={(ev) => {
+                ev.stopPropagation();
+
+                if (numCookies < cost[item.id]) {
+                  alert("You don't have enought cookies!");
+                  return;
+                } else {
+                  setNumCookies(numCookies - cost[item.id])
+                  setPurchasedItems({
+                    ...purchasedItems,
+                    [item.id]: purchasedItems[item.id] + 1,
+                  })
+                  setCost({
+                    ...cost,
+                    [item.id]: Math.floor(cost[item.id] * 1.2),
+                  })
+                }
+
+              }}
+            />
+          );
+        })}
+
       </ItemArea>
-      <HomeLink to="/">Return home</HomeLink>
+      <HomeLink to="/">Home</HomeLink>
     </Wrapper>
   );
 };
@@ -54,6 +133,14 @@ const Button = styled.button`
   border: none;
   background: transparent;
   cursor: pointer;
+  outline: none;
+
+  &:hover{
+        box-shadow: 0px 0px 4px 4px darkblue;
+        border-radius: 2px;
+        padding: 10px;
+        cursor: pointer;
+    }
 `;
 
 const Cookie = styled.img`
