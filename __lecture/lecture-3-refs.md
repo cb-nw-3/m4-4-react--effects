@@ -98,15 +98,13 @@ Use `useRef`
 
 ```js
 const ConfirmButton = () => {
-  React.useEffect(() => {
-    const btn = document.getElementById("confirm-button");
+  const confirmButton = React.useRef()
 
-    if (btn) {
-      btn.focus();
-    }
+  React.useEffect(() => {
+    confirmButton.current.focus();
   }, []);
 
-  return <button id="confirm-button">Confirm</button>;
+  return <button ref={confirmButton}>Confirm</button>;
 };
 ```
 
@@ -114,19 +112,19 @@ const ConfirmButton = () => {
 
 ```js
 const PasswordInput = ({ focusOnMount }) => {
-  React.useEffect(() => {
-    const input = document.querySelector("[data-name=pswrd]");
+  const inputRef = React.useRef()
 
-    if (focusOnMount && input) {
-      input.focus();
+  React.useEffect(() => {
+    if (focusOnMount) {
+      inputRef.current.focus();
     }
-  }, []);
+}, []);
 
   return (
     <label>
       Password:
       <br />
-      <input type="password" data-name="pswrd" />
+      <input type="password" ref={passwordInput}/>
     </label>
   );
 };

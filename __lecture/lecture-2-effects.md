@@ -144,6 +144,19 @@ const App = () => {
 
   return <button onClick={() => setCount(count + 1)}>Increment</button>;
 };
+
+// ANSWER
+
+const App = () => {
+  const [count, setCount] = React.useState(0);
+
+  React.useEffect(() => {
+    document.title = `You have clicked ${count} times`;
+  }, [count])
+
+  return <button onClick={() => setCount(count + 1)}>Increment</button>;
+};
+
 ```
 
 ---
@@ -162,6 +175,34 @@ const App = ({ color }) => {
     </div>
   );
 };
+
+// ANSWER
+
+const App = ({ color }) => {
+  const [value, setValue] = React.useState(false);
+
+  // THIS
+  React.useEffect(() => {
+    window.localStorage.setItem("value", value);
+    window.localStorage.setItem("color", color);
+  }, [value, color])
+  // OR THIS
+  React.useEffect(() => {
+    window.localStorage.setItem("value", value);
+  }, [value])
+  React.useEffect(() => {
+    window.localStorage.setItem("color", color);
+  }, [color])
+
+  return (
+    <div>
+      Color: {color}
+      Value: {value}
+      <button onClick={() => setValue(!value)}>Toggle thing</button>
+    </div>
+  );
+};
+
 ```
 
 ---
@@ -173,6 +214,20 @@ const Modal = ({ handleClose }) => {
       handleClose();
     }
   });
+
+  return <div>Modal stuff</div>;
+};
+
+// ANSWER
+
+const Modal = ({ handleClose }) => {
+  React.useEffect(() => {
+    window.addEventListener("keydown", (ev) => {
+      if (ev.code === "Escape") {
+        handleClose();
+      }
+    });
+  }, [])
 
   return <div>Modal stuff</div>;
 };
@@ -389,7 +444,7 @@ Extract a custom hook
 ---
 
 ```js
-const App = ({ path }) => {
+const useDataFromPath = (path) => {
   const [data, setData] = React.useState(null);
 
   React.useEffect(() => {
@@ -400,6 +455,12 @@ const App = ({ path }) => {
       });
   }, [path]);
 
+  return data;
+}
+
+const App = ({ path }) => {
+  const data = useDataFromPath(path);
+
   return <span>Data: {JSON.stringify(data)}</span>;
 };
 ```
@@ -407,18 +468,24 @@ const App = ({ path }) => {
 ---
 
 ```js live=true
-const Time = ({ throttleDuration }) => {
+const setCurrentTime = (throttleDuration) => {
   const [time, setTime] = React.useState(new Date());
 
   React.useEffect(() => {
     const intervalId = window.setInterval(() => {
       setTime(new Date());
     }, throttleDuration);
-
+    
     return () => {
       window.clearInterval(intervalId);
     };
   }, [throttleDuration]);
+
+  return time
+}
+
+const Time = ({ throttleDuration }) => {
+  const time = setCurrentTime(throttleDuration);
 
   return (
     <span>
