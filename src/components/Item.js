@@ -3,11 +3,12 @@ import styled from "styled-components";
 
 function Item(props) {
   const { id, name, cost, value } = props.item;
-  const { handleClick } = props;
+  const { handleClick, purchasedValue } = props;
+
   return (
     <ItemButton
       onClick={() => {
-        handleClick(name);
+        handleClick(id, cost);
       }}
     >
       <ItemCell>
@@ -19,7 +20,7 @@ function Item(props) {
           </ItemCostAndProduce>
         </ItemNameAndCost>
         <ItemValue>
-          <ItemScore>{props.numOwned}</ItemScore>
+          <ItemScore>{purchasedValue}</ItemScore>
         </ItemValue>
       </ItemCell>
     </ItemButton>
