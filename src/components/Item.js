@@ -9,22 +9,32 @@ function Item(props) {
 
   const firstItem = React.useRef(null);
 
+  let infoSection;
+
+  if (props.item.id !== 'megaClick') {
+    infoSection = <Info>
+      Cost: {props.item.cost} cookie(s) 
+      Produce: {amountOfItems === 0 ? itemDefaultValue : itemValue} cookies/second
+    </Info>
+  } else {
+    infoSection = <Info>
+      Cost: {props.item.cost} cookie(s) 
+      Modification: {amountOfItems === 0 ? 1 : amountOfItems} X click
+    </Info>
+  }
+
   React.useEffect(() => {
     if (props.firstItem === 'cursor') {
-      console.log(props.item.id);
       firstItem.current.focus();
-    }  
-  }, []);
+    }
+  });
   
   return <NameContainer onClick={props.handleClick} ref={firstItem}>
       <Left>
         <Name>{props.item.name}</Name>
-        <Info>
-          Cost: {props.item.cost} cookie(s) 
-          Produce: {amountOfItems === 0 ? itemDefaultValue : itemValue} cookies/second
-        </Info>
+        {infoSection}
       </Left>
-      <Count>{props.numOwned}</Count>
+      <Count>{props.item.id !== 'megaClick' ? props.numOwned : props.numOwned - 1}</Count>
     </NameContainer>
 }
 

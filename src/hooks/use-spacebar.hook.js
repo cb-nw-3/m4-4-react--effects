@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 
 function useSpaceBar(key, callbackFunction) {
   // create function for the event listener

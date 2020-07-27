@@ -13,6 +13,7 @@ const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  { id: "megaClick", name: "Mega Click", cost: 5},
 ];
 
 function calculateCookiesPerTick(purchasedItems) {
@@ -23,7 +24,7 @@ function calculateCookiesPerTick(purchasedItems) {
     // check each items
     items.forEach(dataItem => {
       // verify the value
-      if (dataItem.id === item && purchasedItems[item] > 0) {
+      if (dataItem.id === item && purchasedItems[item] > 0 && dataItem.id !== 'megaClick') {
         // add value
         cookies += dataItem.value * purchasedItems[item]
       }
@@ -42,10 +43,12 @@ const Game = () => {
     cursor: 0,
     grandma: 0,
     farm: 0,
+    megaClick: 1,
   });
+  console.log(purchasedItems)
   // create callback function for the spacebar function that increases cookies by 1
   function incrementWithSpace() {
-    setCookies(numCookies + 1);
+    setCookies(numCookies + purchasedItems.megaClick);
   }
 
   // given interval in folder hooks
@@ -68,7 +71,7 @@ const Game = () => {
           {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per second
         </Indicator>
-        <Button onClick={() => setCookies(numCookies + 1)}>
+        <Button onClick={() => setCookies(numCookies + purchasedItems.megaClick)}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
