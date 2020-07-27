@@ -34,6 +34,7 @@ function calculateCookiesPerTick(purchasedItems) {
 }
 
 const Game = () => {
+  const callbackTitle = 'Cookie Clicker';
   // initialize state of cookies
   const [numCookies, setCookies] = React.useState(100);
   // initialize state for items
@@ -55,7 +56,7 @@ const Game = () => {
   }, 1000)
 
   // tab title update
-  useRefreshTabTitle(`${numCookies} cookies - Cookie Clicker`);
+  useRefreshTabTitle(`${numCookies} cookies - Cookie Clicker`, callbackTitle);
   // spacebar utility hook 
   useSpaceBar('Space', incrementWithSpace)
 
