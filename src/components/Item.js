@@ -9,7 +9,7 @@ const Item = ({ name, cost, value, numOwned, handleClick, isFirst, type }) => {
     if (isFirst) {
       buttonRef.current.focus();
     }
-  }, []);
+  }, [isFirst]);
 
   return (
     <Wrapper onClick={handleClick} ref={buttonRef}>

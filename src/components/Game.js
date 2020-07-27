@@ -72,8 +72,9 @@ const Game = () => {
           second
         </Indicator>
         <Button
-          onClick={(event) => {
-            event.preventDefault();
+          onClick={(ev) => {
+            console.log("in button event");
+            ev.stopPropagation();
             setNumCookies(numCookies + cookiesPerClick);
           }}
         >
@@ -97,7 +98,8 @@ const Game = () => {
               value={item.value}
               type={item.type}
               numOwned={purchasedItems[item.id]}
-              handleClick={() => {
+              handleClick={(ev) => {
+                ev.stopPropagation();
                 if (item.cost > numCookies) {
                   window.alert("Not enough cookies to buy!");
                 } else {

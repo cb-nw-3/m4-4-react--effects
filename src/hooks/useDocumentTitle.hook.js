@@ -6,7 +6,7 @@ const useDocumentTitle = (title, fallBackTitle) => {
     return () => {
       document.title = fallBackTitle;
     };
-  }, [title]);
+  }, [title, fallBackTitle]);
 };
 
 export default useDocumentTitle;
