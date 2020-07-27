@@ -1,23 +1,48 @@
 import React from "react";
 import styled from "styled-components";
 
-const Item = ({ item }) => {
+function HandleClick() {}
+
+const Item = ({ item, purchasedItems, isFirst }) => {
+  const firstNameRef = React.useRef(null);
+
+  console.log(isFirst);
+  let purchased_item = Object.entries(purchasedItems).find(
+    (e) => e[0] === item.id
+  );
+
+  let purchased_item_count = purchased_item[1];
+
+  let value_statement = `cookies.  Produces ${item.value} cookies/second.`;
+
+  React.useEffect(() => {
+    if (isFirst) {
+      firstNameRef.current.focus();
+    }
+  });
+
   return (
-    <ItemElement>
+    <ItemElement ref={firstNameRef}>
+      <Button onClick={HandleClick}></Button>
+
       <ItemNameAndCost>
         <ItemTitle>{item.name}</ItemTitle>
-        <ItemCost>Cost: {item.cost}</ItemCost>
+        <ItemCostAndValue>
+          Cost: {item.cost} {value_statement}
+        </ItemCostAndValue>
       </ItemNameAndCost>
-      <ItemValue>{item.value}</ItemValue>
+      <ItemValue>{purchased_item_count}</ItemValue>
     </ItemElement>
   );
 };
+
 const ItemElement = styled.div`
   border-bottom: 3px solid grey;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin-bottom: 10px;
+  z-index: 1;
 `;
 
 const ItemNameAndCost = styled.div`
@@ -31,7 +56,7 @@ const ItemValue = styled.div`
   text-align: right;
 `;
 
-const ItemCost = styled.div`
+const ItemCostAndValue = styled.div`
   font-size: 15px;
   color: grey;
 `;
@@ -39,4 +64,13 @@ const ItemCost = styled.div`
 const ItemTitle = styled.span`
   font-size: 20px;
 `;
+
+const Button = styled.button`
+  background: transparent;
+  position: absolute;
+  width: 380px;
+  height: 50px;
+  border: 0px;
+`;
+
 export default Item;
