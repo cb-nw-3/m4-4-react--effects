@@ -6,8 +6,17 @@ function Item(props) {
   const amountOfItems = props.purchasedItems[props.item.id];
   const itemDefaultValue = props.item.value;
   const itemValue = props.purchasedItems[props.item.id] * props.item.value;
+
+  const firstItem = React.useRef(null);
+
+  React.useEffect(() => {
+    if (props.firstItem === 'cursor') {
+      console.log(props.item.id);
+      firstItem.current.focus();
+    }  
+  }, []);
   
-  return <NameContainer onClick={props.handleClick}>
+  return <NameContainer onClick={props.handleClick} ref={firstItem}>
       <Left>
         <Name>{props.item.name}</Name>
         <Info>

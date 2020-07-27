@@ -79,6 +79,7 @@ const Game = () => {
             item={item}
             purchasedItems={purchasedItems}
             numOwned={purchasedItems[item.id]} 
+            firstItem={item.id}
             // function in props for onClick in the item
             handleClick={() => {
               // check if you have enough cookies
