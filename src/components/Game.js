@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Item from './Item';
@@ -19,6 +19,12 @@ const Game = () => {
     grandma: 0,
     farm: 0,
   });
+
+  // const ref = useRef(null);
+
+  // useEffect(() => {
+  //   ref.current.focus();
+  // }, []);
 
   useInterval(() => {
     calculateCookiesPerTick(purchasedItems);
@@ -89,6 +95,7 @@ const Game = () => {
                 });
               }
             }}
+            index={index}
           ></Item>
         ))}
       </ItemArea>

@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 
-const Item = ({ info, numOwned, handleClick }) => {
+const Item = ({ info, numOwned, handleClick, index }) => {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (index === 0) {
+      ref.current.focus();
+    }
+  }, []);
+
   return (
-    <ItemWrapper onClick={handleClick}>
+    <ItemWrapper ref={ref} onClick={handleClick}>
       <div>
         <div>{info.name}</div>
         <div>
