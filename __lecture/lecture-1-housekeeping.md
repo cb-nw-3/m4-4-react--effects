@@ -91,3 +91,76 @@ const Button = ({ type, children }) => {
   }
 };
 ```
+const useApi = (path) => {
+  const [data, setData] = React.useState(null);
+  const [error, setError] = React.useState(null);
+  React.useEffect(() => {
+    fetch(path)
+      .then(res => res.json())
+      .then(json => {
+        setData(json);
+      })
+      .catch(err => {
+        setError(err);
+      });
+  }, [path])
+  return [data, error];
+}
+const App = ({ path }) => {
+  const [data, error] = useDataFromPath('goodbye');
+  return (
+    <span>
+      {error && <p className="red">Problem! {error}</p>}
+      Data: {JSON.stringify(data)}
+    </span>
+  );
+}
+const Button = () => {
+  const data = useDataFromPath('/hello');
+}
+
+const Time = ({ throttleDuration }) => {
+  const [time, setTime] = React.useState(
+    new Date()
+  );
+  React.useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setTime(new Date());
+    }, throttleDuration);
+    return () => {
+      window.clearInterval(intervalId);
+    }
+  }, [throttleDuration])
+  return (
+    <span>
+      It is currently<br />{time.toTimeString()}
+    </span>
+  );
+}
+render(<Time throttleDuration={1000} />)
+
+Josh Comeau - Instructor  9:39 AM
+Solution:
+function useCurrentTime(throttleDuration) {
+  const [time, setTime] = React.useState(
+    new Date()
+  );
+  React.useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setTime(new Date());
+    }, throttleDuration);
+    return () => {
+      window.clearInterval(intervalId);
+    }
+  }, [throttleDuration])
+  return time;
+}
+const Time = ({ throttleDuration }) => {
+  const time = useCurrentTime(throttleDuration);
+  return (
+    <span>
+      It is currently<br />{time.toTimeString()}
+    </span>
+  );
+}
+render(<Time throttleDuration={1000} />)
