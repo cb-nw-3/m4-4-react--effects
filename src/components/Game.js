@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import Item from "./Item";
 import useInterval from "../hooks/use-interval.hook";
@@ -19,6 +19,18 @@ const Game = () => {
     grandma: 0,
     farm: 0,
   });
+  function handleKeydown(ev) {
+    if (ev.code === "Space") {
+      setNumCookies(numCookies + 1);
+    }
+  }
+
+  React.useEffect(() => {
+    window.addEventListener("keydown", handleKeydown);
+    return () => {
+      window.removeEventListener("keydown", handleKeydown);
+    };
+  }, [numCookies]);
   React.useEffect(() => {
     document.title =
       numCookies.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
@@ -92,10 +104,28 @@ const GameArea = styled.div`
   display: grid;
   place-items: center;
 `;
+
+const jump = keyframes`
+50% {
+  transform: scale(0.8);
+}
+100% {
+  transform: scale(1.2);
+}
+`;
+const animation = () =>
+  css`
+    ${jump} 1s linear;
+  `;
+
 const Button = styled.button`
   border: none;
+  outline: none;
   background: transparent;
   cursor: pointer;
+  &:active {
+    animation: ${animation};
+  }
 `;
 
 const Cookie = styled.img`
