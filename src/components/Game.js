@@ -11,7 +11,7 @@ const items = [
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
-
+const subTitle = document.title;
 const Game = () => {
   const [numCookies, setNumCookies] = React.useState(1000);
   const [purchasedItems, setPurchasedItems] = React.useState({
@@ -19,6 +19,12 @@ const Game = () => {
     grandma: 0,
     farm: 0,
   });
+  React.useEffect(() => {
+    document.title =
+      numCookies.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+      " cookies - " +
+      subTitle;
+  }, [numCookies]);
 
   function handleClick(id, cost) {
     if (numCookies < cost) {
@@ -28,6 +34,7 @@ const Game = () => {
       setNumCookies(numCookies - cost);
     }
   }
+
   const calculateCookiesPerTick = (purchasedItems) => {
     let totalCookies = 0;
     items.forEach((item) => {
@@ -40,10 +47,6 @@ const Game = () => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
     setNumCookies(numCookies + numOfGeneratedCookies);
   }, 1000);
-  console.log(
-    "calculateCookiesPerTick: ",
-    calculateCookiesPerTick(purchasedItems)
-  );
   return (
     <Wrapper>
       <GameArea>
