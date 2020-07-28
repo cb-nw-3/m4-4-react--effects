@@ -8,7 +8,7 @@ const Item = ({ info, numOwned, handleClick, index }) => {
     if (index === 0) {
       ref.current.focus();
     }
-  }, []);
+  }, [index]);
 
   return (
     <ItemWrapper ref={ref} onClick={handleClick}>

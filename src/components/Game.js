@@ -1,9 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Item from './Item';
 import cookieSrc from '../cookie.svg';
 import useInterval from '../hooks/use-interval.hook';
+import useKeydown from '../hooks/use-keydown.hook';
+import addCommas from '../functions/addCommas';
+import useDocumentTitle from '../hooks/use-documentTitle.hook';
 
 const items = [
   { id: 'cursor', name: 'Cursor', cost: 10, value: 1 },
@@ -12,7 +15,6 @@ const items = [
 ];
 
 const Game = () => {
-  // TODO: Replace this with React state!
   const [numCookies, setNumCookies] = useState(100);
   const [purchasedItems, setPurchasedItems] = useState({
     cursor: 0,
@@ -31,32 +33,16 @@ const Game = () => {
     return additionalCookies;
   };
 
-  useEffect(() => {
-    document.title = `${numCookies} cookies - Cookie Clicker Workshop`;
-    return () => {
-      document.title = `Cookie Clicker Workshop`;
-      //This really does not make any difference in this case
-    };
-  }, [numCookies]);
-
-  useEffect(() => {
-    function handleKeydown(e) {
-      if (e.code === 'Space') {
-        setNumCookies((n) => n + 1);
-      }
-    }
-    window.addEventListener('keydown', handleKeydown);
-    return () => {
-      window.removeEventListener('keydown', handleKeydown);
-    };
-  }, []);
+  useDocumentTitle(numCookies, 'Cookie Clicker Workshop');
+  useKeydown('Space', () => setNumCookies((n) => n + 1));
 
   return (
     <Wrapper>
       <GameArea>
         <Indicator>
-          <Total>{numCookies} cookies</Total>
-          <strong>{calculateCookiesPerTick()}</strong> cookies per second
+          <Total>{addCommas(numCookies)} cookies</Total>
+          <strong>{addCommas(calculateCookiesPerTick())}</strong> cookies per
+          second
         </Indicator>
         <Button
           onClick={() => {
