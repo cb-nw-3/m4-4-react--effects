@@ -9,9 +9,16 @@ import addCommas from '../functions/addCommas';
 import useDocumentTitle from '../hooks/use-documentTitle.hook';
 
 const items = [
-  { id: 'cursor', name: 'Cursor', cost: 10, value: 1 },
-  { id: 'grandma', name: 'Grandma', cost: 100, value: 10 },
-  { id: 'farm', name: 'Farm', cost: 1000, value: 80 },
+  { id: 'cursor', name: 'Cursor', cost: 10, value: 1, frequency: 'second' },
+  { id: 'grandma', name: 'Grandma', cost: 100, value: 10, frequency: 'second' },
+  { id: 'farm', name: 'Farm', cost: 1000, value: 80, frequency: 'second' },
+  {
+    id: 'megaCursor',
+    name: 'Mega Cursor',
+    cost: 10000,
+    value: 700,
+    frequency: 'click',
+  },
 ];
 
 const Game = () => {
@@ -20,33 +27,54 @@ const Game = () => {
     cursor: 0,
     grandma: 0,
     farm: 0,
+    megaCursor: 0,
   });
 
   useInterval(() => {
-    setNumCookies((n) => n + calculateCookiesPerTick());
+    setNumCookies((n) => n + calculateCookiesPerTick().perSecond);
   }, 1000);
 
   const calculateCookiesPerTick = () => {
-    const reducer = (accumulator, current) =>
+    const additionalCookies = {
+      perSecond: 0,
+      perClick: 1,
+    };
+    // checking items with frequency per second
+    const itemsPerSecond = items.filter(
+      (element) => element.frequency === 'second'
+    );
+    const reducerSec = (accumulator, current) =>
       accumulator + current.value * purchasedItems[current.id];
-    const additionalCookies = items.reduce(reducer, 0);
+    additionalCookies.perSecond = itemsPerSecond.reduce(reducerSec, 0);
+    // checking item with frecuency per click
+    const itemsPerClick = items.filter(
+      (element) => element.frequency === 'click'
+    );
+    const reducerClick = (accumulator, current) =>
+      accumulator + current.value * purchasedItems[current.id];
+    additionalCookies.perClick = 1 + itemsPerClick.reduce(reducerClick, 0);
     return additionalCookies;
   };
 
   useDocumentTitle(numCookies, 'Cookie Clicker Workshop');
-  useKeydown('Space', () => setNumCookies((n) => n + 1));
+  useKeydown('Space', () =>
+    setNumCookies((n) => n + 1 + calculateCookiesPerTick().perClick)
+  );
 
   return (
     <Wrapper>
       <GameArea>
         <Indicator>
           <Total>{addCommas(numCookies)} cookies</Total>
-          <strong>{addCommas(calculateCookiesPerTick())}</strong> cookies per
-          second
+          <strong>{addCommas(calculateCookiesPerTick().perSecond)}</strong>{' '}
+          cookies per second
+          <br></br>
+          <strong>{addCommas(calculateCookiesPerTick().perClick)}</strong>{' '}
+          cookies per click
         </Indicator>
         <Button
           onClick={() => {
-            setNumCookies((n) => n + 1);
+            setNumCookies((n) => n + 1 + calculateCookiesPerTick().perClick);
           }}
         >
           <Cookie src={cookieSrc} />

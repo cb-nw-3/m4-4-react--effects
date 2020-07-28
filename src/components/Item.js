@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
+import addCommas from '../functions/addCommas';
 
 const Item = ({ info, numOwned, handleClick, index }) => {
   const ref = useRef(null);
@@ -15,7 +16,9 @@ const Item = ({ info, numOwned, handleClick, index }) => {
       <div>
         <div>{info.name}</div>
         <div>
-          Cost: {info.cost} cookie(s). Produces {info.value} cookie(s)/second
+          Cost: {addCommas(info.cost)} cookie(s). Produces {info.value}{' '}
+          cookie(s)/
+          {info.frequency}
         </div>
       </div>
       <Score>{numOwned}</Score>
