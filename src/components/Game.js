@@ -8,19 +8,6 @@ import useKeydown from '../hooks/use-keydown.hook';
 import addCommas from '../functions/addCommas';
 import useDocumentTitle from '../hooks/use-documentTitle.hook';
 
-const items = [
-  { id: 'cursor', name: 'Cursor', cost: 10, value: 1, frequency: 'second' },
-  { id: 'grandma', name: 'Grandma', cost: 100, value: 10, frequency: 'second' },
-  { id: 'farm', name: 'Farm', cost: 1000, value: 80, frequency: 'second' },
-  {
-    id: 'megaCursor',
-    name: 'Mega Cursor',
-    cost: 10000,
-    value: 700,
-    frequency: 'click',
-  },
-];
-
 const Game = () => {
   const [numCookies, setNumCookies] = useState(100);
   const [purchasedItems, setPurchasedItems] = useState({
@@ -29,6 +16,43 @@ const Game = () => {
     farm: 0,
     megaCursor: 0,
   });
+  const [itemCost, setItemCost] = useState({
+    cursor: 10,
+    grandma: 100,
+    farm: 1000,
+    megaCursor: 1000,
+  });
+
+  const items = [
+    {
+      id: 'cursor',
+      name: 'Cursor',
+      cost: itemCost.cursor,
+      value: 1,
+      frequency: 'second',
+    },
+    {
+      id: 'grandma',
+      name: 'Grandma',
+      cost: itemCost.grandma,
+      value: 10,
+      frequency: 'second',
+    },
+    {
+      id: 'farm',
+      name: 'Farm',
+      cost: itemCost.farm,
+      value: 80,
+      frequency: 'second',
+    },
+    {
+      id: 'megaCursor',
+      name: 'Mega Cursor',
+      cost: itemCost.megaCursor,
+      value: 700,
+      frequency: 'click',
+    },
+  ];
 
   useInterval(() => {
     setNumCookies((n) => n + calculateCookiesPerTick().perSecond);
@@ -96,6 +120,10 @@ const Game = () => {
                 setPurchasedItems({
                   ...purchasedItems,
                   [element.id]: purchasedItems[element.id] + 1,
+                });
+                setItemCost({
+                  ...itemCost,
+                  [element.id]: Math.floor(1 + itemCost[element.id] ** 1.07),
                 });
               }
             }}
