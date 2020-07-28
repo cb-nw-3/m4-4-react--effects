@@ -193,6 +193,7 @@ const ItemArea = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-right: 5vw;
 `;
 
 const SectionTitle = styled.h3`
