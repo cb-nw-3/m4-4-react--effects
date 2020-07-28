@@ -13,12 +13,14 @@ const items = [
 
 const Game = () => {
   // TODO: Replace this with React state!
-  const numCookies = 100;
-  const purchasedItems = {
+
+  const [numCookies, setNumCookies] = React.useState(100);
+
+  const [purchasedItems, setPurchasedItems] = React.useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
-  };
+  })
 
   return (
     <Wrapper>
@@ -28,16 +30,27 @@ const Game = () => {
           {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>0</strong> cookies per second
         </Indicator>
-        {/* TODO-RL: onclick to be added to button tag */}
-        <Button onClick={console.log("what")}>
+        <Button onClick={() => {
+          setNumCookies(numCookies + 1);
+        }}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {/* TODO: Add <Item> instances here, 1 for each item type. */}
-        <Item itemData={items} purchasedItems={purchasedItems} />
+        {/* TODO: add purchase functionality */}
+        <Item itemData={items} numOwned={purchasedItems} handleClick={(item) => {
+          if (item.cost > numCookies) {
+            window.alert("Insufficient cookies!");
+          } else {
+            setNumCookies(numCookies - item.cost);
+            setPurchasedItems({
+              ...purchasedItems,
+              [item.id]: purchasedItems[item.id] + 1,
+            });
+          }
+        }} />
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper >

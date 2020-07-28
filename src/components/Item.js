@@ -6,6 +6,9 @@ const Wrapper = styled.div`
     width: 600px;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #575757;
 `
 
 const ItemDesc = styled.div`
@@ -17,18 +20,27 @@ const ItemDesc = styled.div`
 const ItemNum = styled.div`
     font-size: 30px;
 `
+const ItemName = styled.button`
+    background: rgba(0,0,0,0);
+    border: 0;
+    font-size: 30px;
+    color: white;
+    text-align: left;
+    padding: 0;
+    margin: 0;
+`
 
-const Item = ({ itemData, purchasedItems }) => {
+const Item = ({ itemData, numOwned, handleClick }) => {
     return (
         itemData.map(item => {
             return (
                 <Wrapper>
                     < ItemDesc >
-                        <h1>{item.name}</h1>
+                        <ItemName key={item.id} onClick={() => handleClick(item)}>{item.name}</ItemName>
                         <p>Cost: {item.cost} cookie(s). Produces {item.value} cookies/second.</p>
                     </ItemDesc >
                     <ItemNum>
-                        {purchasedItems[item.id]}
+                        {numOwned[item.id]}
                     </ItemNum>
                 </Wrapper>
             )
