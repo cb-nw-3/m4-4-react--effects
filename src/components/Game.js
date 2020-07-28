@@ -23,9 +23,23 @@ const Game = () => {
     farm: 0,
   })
 
+  // this shouldn't be so hard. We just need to do the math.
+
+  function calculateCookiesPerTick(data) {
+
+    let totalCookies = 0;
+
+    items.forEach((item) => {
+      totalCookies += item.value * data[item.id];
+    })
+
+    return totalCookies;
+  }
+
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems)
 
+    setNumCookies(numCookies + numOfGeneratedCookies);
     // Add this number of cookies to the total
   }, 1000)
 
@@ -35,7 +49,7 @@ const Game = () => {
         <Indicator>
           <Total>{numCookies} cookies</Total>
           {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>0</strong> cookies per second
+          <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per second
         </Indicator>
         <Button onClick={() => {
           setNumCookies(numCookies + 1);
