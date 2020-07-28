@@ -8,6 +8,7 @@ import useInterval from '../hooks/use-interval.hook';
 import useKeydown from '../hooks/use-keydown.hook';
 import addCommas from '../functions/addCommas';
 import useDocumentTitle from '../hooks/use-documentTitle.hook';
+import RainCookie from './RainCookie';
 
 const Game = () => {
   const [numCookies, setNumCookies] = useState(100);
@@ -24,11 +25,16 @@ const Game = () => {
     megaCursor: 1000,
   });
 
-  let style = {
+  let styleBackground = {
     backgroundImage: 'url(' + stars + ')',
     width: '500px',
     height: '700px',
   };
+
+  let styleButton = {
+    border: '2px solid green',
+  };
+
   const items = [
     {
       id: 'cursor',
@@ -102,8 +108,10 @@ const Game = () => {
           <strong>{addCommas(calculateCookiesPerTick().perClick)}</strong>{' '}
           cookies per click
         </Indicator>
-        <Background style={style}>
+        <Background style={styleBackground}>
+          <RainCookie></RainCookie>
           <Button
+            style={styleButton}
             onClick={() => {
               setNumCookies((n) => n + 1 + calculateCookiesPerTick().perClick);
             }}
@@ -155,11 +163,12 @@ const GameArea = styled.div`
 `;
 
 const Background = styled.div`
+  position: relative;
   width: 400px;
   height: 500px;
   display: flex;
+  align-items: center;
   justify-content: center;
-  border: 2px solid white;
   border: 12px solid transparent;
   border-image: linear-gradient(
     to bottom right,
@@ -170,7 +179,6 @@ const Background = styled.div`
     #fd1892 100%
   );
   border-image-slice: 1;
-  background-image: url('../stars.gif');
   overflow: hidden;
 `;
 
