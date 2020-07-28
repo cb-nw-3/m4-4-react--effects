@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Item from './Item';
 import cookieSrc from '../cookie.svg';
+import stars from '../stars.gif';
 import useInterval from '../hooks/use-interval.hook';
 import useKeydown from '../hooks/use-keydown.hook';
 import addCommas from '../functions/addCommas';
@@ -23,6 +24,11 @@ const Game = () => {
     megaCursor: 1000,
   });
 
+  let style = {
+    backgroundImage: 'url(' + stars + ')',
+    width: '500px',
+    height: '700px',
+  };
   const items = [
     {
       id: 'cursor',
@@ -96,13 +102,15 @@ const Game = () => {
           <strong>{addCommas(calculateCookiesPerTick().perClick)}</strong>{' '}
           cookies per click
         </Indicator>
-        <Button
-          onClick={() => {
-            setNumCookies((n) => n + 1 + calculateCookiesPerTick().perClick);
-          }}
-        >
-          <Cookie src={cookieSrc} />
-        </Button>
+        <Background style={style}>
+          <Button
+            onClick={() => {
+              setNumCookies((n) => n + 1 + calculateCookiesPerTick().perClick);
+            }}
+          >
+            <Cookie src={cookieSrc} />
+          </Button>
+        </Background>
       </GameArea>
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
@@ -145,14 +153,38 @@ const GameArea = styled.div`
   display: grid;
   place-items: center;
 `;
+
+const Background = styled.div`
+  width: 400px;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  border: 2px solid white;
+  border: 12px solid transparent;
+  border-image: linear-gradient(
+    to bottom right,
+    #b827fc 0%,
+    #2c90fc 25%,
+    #b8fd33 50%,
+    #fec837 75%,
+    #fd1892 100%
+  );
+  border-image-slice: 1;
+  background-image: url('../stars.gif');
+  overflow: hidden;
+`;
+
 const Button = styled.button`
   border: none;
   background: transparent;
   cursor: pointer;
+  border-radius: 50%;
+  outline: none;
 `;
 
 const Cookie = styled.img`
   width: 200px;
+  border-radius: 50%;
 `;
 
 const ItemArea = styled.div`
