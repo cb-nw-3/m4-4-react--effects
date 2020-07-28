@@ -51,6 +51,8 @@ const App = () => {
 };
 
 render(<App />);
+
+//this is bad because everytime it realoads, it'll add a new Event listener that'll all fire off on scroll.
 ```
 
 ---
@@ -144,6 +146,18 @@ const App = () => {
 
   return <button onClick={() => setCount(count + 1)}>Increment</button>;
 };
+
+//Solution
+
+const App = () => {
+  const [count, setCount] = React.useState(0);
+
+  React.useEffect(() => {
+    document.title = `You have clicked ${count} times`;
+  }, [count]);
+
+  return <button onClick={() => setCount(count + 1)}>Increment</button>;
+};
 ```
 
 ---
@@ -154,6 +168,27 @@ const App = ({ color }) => {
 
   window.localStorage.setItem("value", value);
   window.localStorage.setItem("color", color);
+
+  return (
+    <div>
+      Value: {value}
+      <button onClick={() => setValue(!value)}>Toggle thing</button>
+    </div>
+  );
+};
+
+//Solution
+
+const App = ({ color }) => {
+  const [value, setValue] = React.useState(false);
+
+  React.useEffect(() => {
+    window.localStorage.setItem("value", value);
+  }, [value]);
+
+  React.useEffect(() => {
+    window.localStorage.setItem("color", color);
+  }, [color]);
 
   return (
     <div>
@@ -174,6 +209,19 @@ const Modal = ({ handleClose }) => {
     }
   });
 
+  return <div>Modal stuff</div>;
+};
+
+//Solution
+
+const Modal = ({ handleClose }) => {
+  React.useEffect(() => {
+    window.addEventListener("keydown", (ev) => {
+      if (ev.code === "Escape") {
+        handleClose();
+      }
+    });
+  }, []);
   return <div>Modal stuff</div>;
 };
 ```
@@ -206,7 +254,7 @@ Let's say we have some routes:
 ---
 
 Our Home component has some sort of event listener.
-It also has a link to the other route.
+It also has a link to the other route.When we go from Home to about, the Home component goes away and is removed from the html. However, the event listener, which is mounted on the window, remains. So everytime we go back to /home, the Home component gets added again and an event listener is added.
 
 ```js
 const Home = () => {
@@ -402,11 +450,33 @@ const App = ({ path }) => {
 
   return <span>Data: {JSON.stringify(data)}</span>;
 };
+
+//solution
+
+const useDataFromPath = (path) => {
+  const [data, setData] = React.useState(null);
+
+  React.useEffect(() => {
+    fetch(path)
+      .then((res) => res.json())
+      .then((json) => {
+        setData(json);
+      });
+  }, [path]);
+
+  return data;
+};
+
+const App = ({ path }) => {
+  const data = useDataFromPath(path);
+
+  return <span>Data: {JSON.stringify(data)}</span>;
+};
 ```
 
 ---
 
-```js live=true
+```js
 const Time = ({ throttleDuration }) => {
   const [time, setTime] = React.useState(new Date());
 
@@ -429,5 +499,29 @@ const Time = ({ throttleDuration }) => {
   );
 };
 
+//Solution
+
+function useCurrentTime(throttleDuration) {
+  const [time, setTime] = React.useState(new Date());
+  React.useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setTime(new Date());
+    }, throttleDuration);
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [throttleDuration]);
+  return time;
+}
+const Time = ({ throttleDuration }) => {
+  const time = useCurrentTime(throttleDuration);
+  return (
+    <span>
+      It is currently
+      <br />
+      {time.toTimeString()}
+    </span>
+  );
+};
 render(<Time throttleDuration={1000} />);
 ```
