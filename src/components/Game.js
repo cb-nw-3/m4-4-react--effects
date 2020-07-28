@@ -20,24 +20,15 @@ const Game = () => {
     farm: 0,
   });
 
-  // const ref = useRef(null);
-
-  // useEffect(() => {
-  //   ref.current.focus();
-  // }, []);
-
   useInterval(() => {
-    calculateCookiesPerTick(purchasedItems);
-
-    // Add his number of cookies to the total
+    setNumCookies((n) => n + calculateCookiesPerTick());
   }, 1000);
 
-  const calculateCookiesPerTick = (purchasedItems) => {
-    let initialValue = 0;
+  const calculateCookiesPerTick = () => {
     const reducer = (accumulator, current) =>
       accumulator + current.value * purchasedItems[current.id];
-    const additionalCookies = items.reduce(reducer, initialValue);
-    setNumCookies(numCookies + additionalCookies);
+    const additionalCookies = items.reduce(reducer, 0);
+    return additionalCookies;
   };
 
   useEffect(() => {
@@ -65,8 +56,7 @@ const Game = () => {
       <GameArea>
         <Indicator>
           <Total>{numCookies} cookies</Total>
-          {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>0</strong> cookies per second
+          <strong>{calculateCookiesPerTick()}</strong> cookies per second
         </Indicator>
         <Button
           onClick={() => {
