@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Item from './Item';
+import useInterval from '../hooks/use-interval.hook'
 
 import cookieSrc from "../cookie.svg";
 
@@ -21,6 +22,12 @@ const Game = () => {
     grandma: 0,
     farm: 0,
   })
+
+  useInterval(() => {
+    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems)
+
+    // Add this number of cookies to the total
+  }, 1000)
 
   return (
     <Wrapper>
