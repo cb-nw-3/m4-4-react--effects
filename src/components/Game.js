@@ -47,7 +47,6 @@ const Game = () => {
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      console.log("removed");
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [numCookies]);
@@ -76,6 +75,7 @@ const Game = () => {
           return (
             <Item
               key={index}
+              index={index}
               id={item.id}
               name={item.name}
               cost={item.cost}
