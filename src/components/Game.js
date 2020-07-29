@@ -43,6 +43,10 @@ const Game = () => {
     // Add this number of cookies to the total
   }, 1000)
 
+  React.useEffect(() => {
+    document.title = `${numCookies} cookies!`;
+  })
+
   return (
     <Wrapper>
       <GameArea>
