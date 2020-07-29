@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Item from "./Item.js";
@@ -12,16 +12,20 @@ const items = [
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
 
-const handleClick = (numCookies, cost) => {
-  console.log(numCookies);
-  console.log(cost);
+const calculateCookiesPerTick = (purchasedItems) => {
+  return Object.keys(purchasedItems).reduce((accumulator, itemId) => {
+    let value = purchasedItems[itemId];
+    let item = items.find((item) => item.id === itemId);
+    let quant = item.value;
+    return accumulator + value * quant;
+  }, 0);
 };
 
 const Game = () => {
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
-
     // Add this number of cookies to the total
+    SetnumCookies(numCookies + numOfGeneratedCookies);
   }, 1000);
 
   // TODO: Replace this with React state!
@@ -31,6 +35,21 @@ const Game = () => {
     grandma: 0,
     farm: 0,
   });
+
+  useEffect(() => {
+    document.title = `${numCookies} cookies - Cookie Clicked`;
+  }, [numCookies]);
+
+  useEffect(() => {
+    const handleKeyDown = (ev) => {
+      if (ev.code === "Space") {
+        console.log("hit");
+        increasePoints();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    window.removeEventListener("keydown", handleKeyDown);
+  }, [numCookies]);
 
   const increasePoints = () => {
     SetnumCookies(numCookies + 1);
@@ -42,7 +61,8 @@ const Game = () => {
         <Indicator>
           <Total>{numCookies} cookies</Total>
           {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>0</strong> cookies per second
+          <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per
+          second
         </Indicator>
         <Button onClick={increasePoints}>
           <Cookie src={cookieSrc} />
