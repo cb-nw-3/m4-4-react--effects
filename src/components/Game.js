@@ -24,11 +24,9 @@ const calculateCookiesPerTick = (purchasedItems) => {
 const Game = () => {
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
-    // Add this number of cookies to the total
     SetnumCookies(numCookies + numOfGeneratedCookies);
   }, 1000);
 
-  // TODO: Replace this with React state!
   const [numCookies, SetnumCookies] = useState(100);
   const [purchasedItems, SetpurchasedItems] = useState({
     cursor: 0,
@@ -43,12 +41,15 @@ const Game = () => {
   useEffect(() => {
     const handleKeyDown = (ev) => {
       if (ev.code === "Space") {
-        console.log("hit");
         increasePoints();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
-    window.removeEventListener("keydown", handleKeyDown);
+
+    return () => {
+      console.log("removed");
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, [numCookies]);
 
   const increasePoints = () => {
