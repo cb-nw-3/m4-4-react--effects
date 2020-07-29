@@ -47,6 +47,19 @@ const Game = () => {
     document.title = `${numCookies} cookies!`;
   })
 
+  function handleKeyPress(ev) {
+    if (ev.key === "Space") {
+      setNumCookies(numCookies + 1);
+    }
+  }
+
+  React.useEffect(() => {
+    window.addEventListener('keypress', handleKeyPress);
+    return () => {
+      window.removeEventListener('keypress', handleKeyPress);
+    }
+  })
+
   return (
     <Wrapper>
       <GameArea>
