@@ -3,13 +3,21 @@ import styled from "styled-components";
 
 function Item(props) {
   const { id, name, cost, value } = props.item;
-  const { handleClick, purchasedValue } = props;
+  const { handleClick, purchasedValue, index } = props;
+  const ref = React.useRef(null);
+
+  React.useEffect(() => {
+    if (index == 0) {
+      ref.current.focus();
+    }
+  }, []);
 
   return (
     <ItemButton
       onClick={() => {
         handleClick(id, cost);
       }}
+      ref={ref}
     >
       <ItemCell>
         <ItemNameAndCost>

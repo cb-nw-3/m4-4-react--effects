@@ -78,12 +78,13 @@ const Game = () => {
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {items.map((element) => {
+        {items.map((element, index) => {
           return (
             <Item
               item={element}
               handleClick={handleClick}
               purchasedValue={purchasedItems[element.id]}
+              index={index}
             />
           );
         })}
