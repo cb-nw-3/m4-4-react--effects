@@ -1,7 +1,8 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { Link } from "react-router-dom";
-
+import Item from "./Item";
+import useInterval from "../hooks/use-interval.hook";
 import cookieSrc from "../cookie.svg";
 
 const items = [
@@ -9,32 +10,100 @@ const items = [
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
+const subTitle = document.title;
+
+const useKeydown = (code, callback) => {
+  const handleKeydown = (ev) => {
+    if (ev.code === code) {
+      callback();
+    }
+  };
+  React.useEffect(() => {
+    window.addEventListener("keydown", handleKeydown);
+    return () => {
+      window.removeEventListener("keydown", handleKeydown);
+    };
+  });
+};
+
+const useDocumentTitle = (title, fallbackTitle) => {
+  React.useEffect(() => {
+    document.title = title;
+    return () => {
+      document.title = fallbackTitle;
+    };
+  });
+};
 
 const Game = () => {
-  // TODO: Replace this with React state!
-  const numCookies = 100;
-  const purchasedItems = {
+  const [numCookies, setNumCookies] = React.useState(1000);
+  const [purchasedItems, setPurchasedItems] = React.useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
-  };
+  });
 
+  function handleClick(id, cost) {
+    if (numCookies < cost) {
+      alert("Out of cookies Mr. " + id);
+    } else {
+      setPurchasedItems({ ...purchasedItems, [id]: purchasedItems[id] + 1 });
+      setNumCookies(numCookies - cost);
+    }
+  }
+
+  const title =
+    numCookies.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+    " cookies - " +
+    subTitle;
+  const fallBack = "Cookie Cutter";
+
+  useDocumentTitle(title, fallBack);
+
+  const calculateCookiesPerTick = (purchasedItems) => {
+    let totalCookies = 0;
+    items.forEach((item) => {
+      totalCookies += item.value * purchasedItems[item.id];
+    });
+    return totalCookies;
+  };
+  useKeydown("Space", () => {
+    setNumCookies(numCookies + 1);
+  });
+
+  useInterval(() => {
+    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
+    setNumCookies(numCookies + numOfGeneratedCookies);
+  }, 1000);
   return (
     <Wrapper>
       <GameArea>
         <Indicator>
           <Total>{numCookies} cookies</Total>
-          {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>0</strong> cookies per second
+          <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per
+          second
         </Indicator>
-        <Button>
+        <Button
+          onClick={() => {
+            setNumCookies(numCookies + 1);
+          }}
+        >
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {/* TODO: Add <Item> instances here, 1 for each item type. */}
+        {items.map((element, index) => {
+          return (
+            <Item
+              item={element}
+              handleClick={handleClick}
+              purchasedValue={purchasedItems[element.id]}
+              index={index}
+            />
+          );
+        })}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
@@ -44,16 +113,36 @@ const Game = () => {
 const Wrapper = styled.div`
   display: flex;
   height: 100vh;
+  width: 95%;
+  margin: 0 auto;
 `;
 const GameArea = styled.div`
-  flex: 1;
+  flex: 4;
   display: grid;
   place-items: center;
 `;
+
+const jump = keyframes`
+50% {
+  transform: scale(0.8);
+}
+100% {
+  transform: scale(1.2);
+}
+`;
+const animation = () =>
+  css`
+    ${jump} 1s linear;
+  `;
+
 const Button = styled.button`
   border: none;
+  outline: none;
   background: transparent;
   cursor: pointer;
+  &:active {
+    animation: ${animation};
+  }
 `;
 
 const Cookie = styled.img`
@@ -66,6 +155,7 @@ const ItemArea = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  flex: 3;
 `;
 
 const SectionTitle = styled.h3`

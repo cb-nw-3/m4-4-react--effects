@@ -9,7 +9,7 @@ Here's how we would do this, in vanilla JS:
 ```js
 function handleKeydown(ev) {
   if (ev.code === "Space") {
-    // Trigger here
+    
   }
 }
 
