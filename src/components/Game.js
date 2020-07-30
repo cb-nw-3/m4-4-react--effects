@@ -12,6 +12,22 @@ const items = [
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
 
+// think further upon the logic here
+
+function useKeydown(keypress, callback) {
+  function handleKeyPress(ev) {
+    if (ev.key === keypress) {
+      callback();
+    }
+  }
+  React.useEffect(() => {
+    window.addEventListener('keypress', handleKeyPress);
+    return () => {
+      window.removeEventListener('keypress', handleKeyPress);
+    }
+  })
+}
+
 const Game = () => {
   // TODO: Replace this with React state!
 
@@ -22,6 +38,8 @@ const Game = () => {
     grandma: 0,
     farm: 0,
   })
+
+  useKeydown('space', () => setNumCookies(numCookies + 1));
 
   // this shouldn't be so hard. We just need to do the math.
 
@@ -53,12 +71,7 @@ const Game = () => {
     }
   }
 
-  React.useEffect(() => {
-    window.addEventListener('keypress', handleKeyPress);
-    return () => {
-      window.removeEventListener('keypress', handleKeyPress);
-    }
-  })
+
 
   return (
     <Wrapper>
@@ -77,7 +90,9 @@ const Game = () => {
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {/* TODO: add purchase functionality */}
+        {/* TODO: add purchase functionality
+        move map logic up; this will allow us to pass the isFirst prop down
+        */}
         <Item itemData={items} numOwned={purchasedItems} handleClick={(item) => {
           if (item.cost > numCookies) {
             window.alert("Insufficient cookies!");

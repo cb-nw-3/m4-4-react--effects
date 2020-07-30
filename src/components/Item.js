@@ -31,8 +31,20 @@ const ItemName = styled.button`
 `
 
 const Item = ({ itemData, numOwned, handleClick }) => {
+
+    const ref = React.useRef(null);
+
+    React.useEffect(() => {
+        if (isFirst === true) {
+            ref.current.focus();
+        }
+    });
+
     return (
-        itemData.map(item => {
+        itemData.map((item, index) => {
+
+            let isFirst = index === 0;
+
             return (
                 <Wrapper>
                     < ItemDesc >
