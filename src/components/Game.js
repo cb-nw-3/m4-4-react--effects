@@ -56,14 +56,9 @@ const Game = () => {
     numCookies.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
     " cookies - " +
     subTitle;
-
   const fallBack = "Cookie Cutter";
 
   useDocumentTitle(title, fallBack);
-
-  const incrementCookie = () => {
-    setNumCookies(numCookies + 1);
-  };
 
   const calculateCookiesPerTick = (purchasedItems) => {
     let totalCookies = 0;
@@ -72,7 +67,9 @@ const Game = () => {
     });
     return totalCookies;
   };
-  useKeydown("Space", incrementCookie);
+  useKeydown("Space", () => {
+    setNumCookies(numCookies + 1);
+  });
 
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
