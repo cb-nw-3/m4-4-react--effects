@@ -3,7 +3,6 @@ import styled, { css, keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import Item from "./Item";
 import useInterval from "../hooks/use-interval.hook";
-
 import cookieSrc from "../cookie.svg";
 
 const items = [
@@ -12,6 +11,30 @@ const items = [
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
 const subTitle = document.title;
+
+const useKeydown = (code, callback) => {
+  const handleKeydown = (ev) => {
+    if (ev.code === code) {
+      callback();
+    }
+  };
+  React.useEffect(() => {
+    window.addEventListener("keydown", handleKeydown);
+    return () => {
+      window.removeEventListener("keydown", handleKeydown);
+    };
+  });
+};
+
+const useDocumentTitle = (title, fallbackTitle) => {
+  React.useEffect(() => {
+    document.title = title;
+    return () => {
+      document.title = fallbackTitle;
+    };
+  });
+};
+
 const Game = () => {
   const [numCookies, setNumCookies] = React.useState(1000);
   const [purchasedItems, setPurchasedItems] = React.useState({
@@ -19,24 +42,6 @@ const Game = () => {
     grandma: 0,
     farm: 0,
   });
-  function handleKeydown(ev) {
-    if (ev.code === "Space") {
-      setNumCookies(numCookies + 1);
-    }
-  }
-
-  React.useEffect(() => {
-    window.addEventListener("keydown", handleKeydown);
-    return () => {
-      window.removeEventListener("keydown", handleKeydown);
-    };
-  }, [numCookies]);
-  React.useEffect(() => {
-    document.title =
-      numCookies.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-      " cookies - " +
-      subTitle;
-  }, [numCookies]);
 
   function handleClick(id, cost) {
     if (numCookies < cost) {
@@ -47,6 +52,19 @@ const Game = () => {
     }
   }
 
+  const title =
+    numCookies.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+    " cookies - " +
+    subTitle;
+
+  const fallBack = "Cookie Cutter";
+
+  useDocumentTitle(title, fallBack);
+
+  const incrementCookie = () => {
+    setNumCookies(numCookies + 1);
+  };
+
   const calculateCookiesPerTick = (purchasedItems) => {
     let totalCookies = 0;
     items.forEach((item) => {
@@ -54,6 +72,7 @@ const Game = () => {
     });
     return totalCookies;
   };
+  useKeydown("Space", incrementCookie);
 
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);

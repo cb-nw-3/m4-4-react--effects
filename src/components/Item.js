@@ -7,7 +7,7 @@ function Item(props) {
   const ref = React.useRef(null);
 
   React.useEffect(() => {
-    if (index == 0) {
+    if (index === 0) {
       ref.current.focus();
     }
   }, []);

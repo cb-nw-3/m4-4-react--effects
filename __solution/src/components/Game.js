@@ -27,7 +27,6 @@ const calculateCookiesPerSecond = (purchasedItems) => {
 
 const Game = () => {
   const [numCookies, setNumCookies] = React.useState(1000);
-
   const [purchasedItems, setPurchasedItems] = React.useState({
     cursor: 0,
     grandma: 0,

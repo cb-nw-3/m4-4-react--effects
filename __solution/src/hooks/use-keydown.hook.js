@@ -7,7 +7,6 @@ export default function useKeydown(code, callback) {
         callback(ev);
       }
     };
-
     window.addEventListener("keydown", handleKeydown);
 
     return () => {
