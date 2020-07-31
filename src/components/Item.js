@@ -30,33 +30,26 @@ const ItemName = styled.button`
     margin: 0;
 `
 
-const Item = ({ itemData, numOwned, handleClick }) => {
 
+const Item = ({ itemData, numOwned, handleClick, index }) => {
     const ref = React.useRef(null);
 
     React.useEffect(() => {
-        if (isFirst === true) {
+        if (index === 0) {
             ref.current.focus();
         }
-    });
+    }, []);
 
     return (
-        itemData.map((item, index) => {
-
-            let isFirst = index === 0;
-
-            return (
-                <Wrapper>
-                    < ItemDesc >
-                        <ItemName key={item.id} onClick={() => handleClick(item)}>{item.name}</ItemName>
-                        <p>Cost: {item.cost} cookie(s). Produces {item.value} cookies/second.</p>
-                    </ItemDesc >
-                    <ItemNum>
-                        {numOwned[item.id]}
-                    </ItemNum>
-                </Wrapper>
-            )
-        })
+        <Wrapper ref={ref}>
+            < ItemDesc >
+                <ItemName key={itemData.id} onClick={() => handleClick(itemData)}>{itemData.name}</ItemName>
+                <p>Cost: {itemData.cost} cookie(s). Produces {itemData.value} cookies/second.</p>
+            </ItemDesc >
+            <ItemNum>
+                {numOwned}
+            </ItemNum>
+        </Wrapper>
     )
 }
 

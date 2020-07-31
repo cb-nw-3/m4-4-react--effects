@@ -71,6 +71,8 @@ const Game = () => {
     }
   }
 
+  let isFirst = true;
+
 
 
   return (
@@ -93,17 +95,27 @@ const Game = () => {
         {/* TODO: add purchase functionality
         move map logic up; this will allow us to pass the isFirst prop down
         */}
-        <Item itemData={items} numOwned={purchasedItems} handleClick={(item) => {
-          if (item.cost > numCookies) {
-            window.alert("Insufficient cookies!");
-          } else {
-            setNumCookies(numCookies - item.cost);
-            setPurchasedItems({
-              ...purchasedItems,
-              [item.id]: purchasedItems[item.id] + 1,
-            });
-          }
-        }} />
+
+        {items.map((item, index) => {
+
+          return <Item
+            itemData={item}
+            numOwned={purchasedItems[item.id]}
+            index={index}
+            handleClick={(item) => {
+              if (item.cost > numCookies) {
+                window.alert("Insufficient cookies!");
+              } else {
+                setNumCookies(numCookies - item.cost);
+                setPurchasedItems({
+                  ...purchasedItems,
+                  [item.id]: purchasedItems[item.id] + 1,
+                });
+              }
+            }
+            } />
+        })}
+
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper >
