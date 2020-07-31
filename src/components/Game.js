@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Item from './Item';
 import cookieSrc from '../cookie.svg';
-import stars from '../stars.gif';
 import useInterval from '../hooks/use-interval.hook';
 import useKeydown from '../hooks/use-keydown.hook';
 import addCommas from '../functions/addCommas';
 import useDocumentTitle from '../hooks/use-documentTitle.hook';
 import RainCookie from './RainCookie';
+import stars from '../stars.gif';
 
 const Game = () => {
   const [numCookies, setNumCookies] = useState(100);
@@ -18,6 +18,7 @@ const Game = () => {
     farm: 0,
     megaCursor: 0,
   });
+
   const [itemCost, setItemCost] = useState({
     cursor: 10,
     grandma: 100,
@@ -31,9 +32,7 @@ const Game = () => {
     height: '700px',
   };
 
-  let styleButton = {
-    border: '2px solid green',
-  };
+  let styleButton = {};
 
   const items = [
     {
@@ -109,7 +108,6 @@ const Game = () => {
           cookies per click
         </Indicator>
         <Background style={styleBackground}>
-          <RainCookie></RainCookie>
           <Button
             style={styleButton}
             onClick={() => {
