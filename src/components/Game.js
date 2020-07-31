@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import Item from './Item';
+import useInterval from '../hooks/use-interval.hook'
 
 import cookieSrc from "../cookie.svg";
 
@@ -10,14 +12,68 @@ const items = [
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
 
+// think further upon the logic here
+
+function useKeydown(keypress, callback) {
+  function handleKeyPress(ev) {
+    if (ev.key === keypress) {
+      callback();
+    }
+  }
+  React.useEffect(() => {
+    window.addEventListener('keypress', handleKeyPress);
+    return () => {
+      window.removeEventListener('keypress', handleKeyPress);
+    }
+  })
+}
+
 const Game = () => {
   // TODO: Replace this with React state!
-  const numCookies = 100;
-  const purchasedItems = {
+
+  const [numCookies, setNumCookies] = React.useState(100);
+
+  const [purchasedItems, setPurchasedItems] = React.useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
-  };
+  })
+
+  useKeydown('space', () => setNumCookies(numCookies + 1));
+
+  // this shouldn't be so hard. We just need to do the math.
+
+  function calculateCookiesPerTick(data) {
+
+    let totalCookies = 0;
+
+    items.forEach((item) => {
+      totalCookies += item.value * data[item.id];
+    })
+
+    return totalCookies;
+  }
+
+  useInterval(() => {
+    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems)
+
+    setNumCookies(numCookies + numOfGeneratedCookies);
+    // Add this number of cookies to the total
+  }, 1000)
+
+  React.useEffect(() => {
+    document.title = `${numCookies} cookies!`;
+  })
+
+  function handleKeyPress(ev) {
+    if (ev.key === "Space") {
+      setNumCookies(numCookies + 1);
+    }
+  }
+
+  let isFirst = true;
+
+
 
   return (
     <Wrapper>
@@ -25,19 +81,44 @@ const Game = () => {
         <Indicator>
           <Total>{numCookies} cookies</Total>
           {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>0</strong> cookies per second
+          <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per second
         </Indicator>
-        <Button>
+        <Button onClick={() => {
+          setNumCookies(numCookies + 1);
+        }}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {/* TODO: Add <Item> instances here, 1 for each item type. */}
+        {/* TODO: add purchase functionality
+        move map logic up; this will allow us to pass the isFirst prop down
+        */}
+
+        {items.map((item, index) => {
+
+          return <Item
+            itemData={item}
+            numOwned={purchasedItems[item.id]}
+            index={index}
+            handleClick={(item) => {
+              if (item.cost > numCookies) {
+                window.alert("Insufficient cookies!");
+              } else {
+                setNumCookies(numCookies - item.cost);
+                setPurchasedItems({
+                  ...purchasedItems,
+                  [item.id]: purchasedItems[item.id] + 1,
+                });
+              }
+            }
+            } />
+        })}
+
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
-    </Wrapper>
+    </Wrapper >
   );
 };
 
