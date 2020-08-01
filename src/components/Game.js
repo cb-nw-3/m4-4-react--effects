@@ -6,6 +6,8 @@ import Item from "./Item";
 
 import cookieSrc from "../cookie.svg";
 
+import useInterval from "../hooks/use-interval.hook";
+
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
@@ -21,28 +23,82 @@ const Game = () => {
   //   farm: 0,
   // };
 
-  //** ###### functions
-  function addCookies() {
-    setNumCookies(numCookies + 1);
-  }
+  //  ################################################## States
 
-  //** States
   const [numCookies, setNumCookies] = React.useState(100);
   const [purchasedItems, setPurchasedItems] = React.useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
   });
-  //** States
+
+  // ################################################### Functions
+
+  // ** Exercise 2
+  function addCookies() {
+    setNumCookies(numCookies + 1);
+  }
+
+  // *** Exercise 3
+  function calculateCookiesPerTick(inventory) {
+    let total = 0;
+    for (const item in inventory) {
+      let add = items.find((i) => i.id === item).value;
+      total += inventory[item] * add;
+    }
+    return total;
+  }
+  // *** Exercise 3
+
+  // ***** Exercise 5
+  // Function to add a cookie when space is pushed.
+  function handleKeydown(ev) {
+    if (ev.code === "Space") {
+      addCookies();
+    }
+  }
+  // ***** Exercise 5
+
+  // ################################################### UseEffect/UseIntervals
+
+  // *** Exercise 3
+  useInterval(() => {
+    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
+    setNumCookies(numOfGeneratedCookies + numCookies);
+  }, 1000);
+
+  // *** Exercise 3
+
+  // **** Exercise 4
+
+  React.useEffect(() => {
+    document.title = `${numCookies} - Cookie Clicker Workshop`; // This updates the page title once the page rendered.
+    return () => {
+      document.title = "Cookie Clicker Workshop"; // Title will show this when the client leaves the game page.
+    };
+  }, [numCookies]); // Second argument in useEffect is used to signal when to use the effect, in this case, when numCookies is updated.
+
+  // **** Exercise 4
+
+  // ***** Exercise 5
+  // Calls the function handleKeydown when the keyboard button is pushed.
+  React.useEffect(() => {
+    window.addEventListener("keydown", handleKeydown);
+    return () => {
+      window.removeEventListener("keydown", handleKeydown);
+    };
+  }, [numCookies]); // renders once the state on the second argument is changed.
+  // ***** Exercise 5
+
   return (
     <Wrapper>
       <GameArea>
         <Indicator>
           <Total>{numCookies} cookies</Total>
-          {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>0</strong> cookies per second
+          {/* Exercise 3*/}
+          <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per
+          second
         </Indicator>
-        {/* ** */}
         <Button onClick={addCookies}>
           <Cookie src={cookieSrc} />
         </Button>
@@ -67,7 +123,7 @@ const Game = () => {
                 [item.id]: purchasedItems[item.id] + 1,
               });
             } else {
-              window.alert(`Cannot afford a ${item.name}!`);
+              window.alert(`Cannot pay for a ${item.name}!`);
             }
           }
           return (
