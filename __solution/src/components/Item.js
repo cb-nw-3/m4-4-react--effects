@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const Item = ({
   index,
@@ -22,7 +22,7 @@ const Item = ({
       <Left>
         <Name>{name}</Name>
         <Info>
-          Cost: {cost} cookie(s). Produces {value} cookies/second.
+          Cost: {cost} cookie(s). Produces {value} cookies/{type}.
         </Info>
       </Left>
       <Right>{numOwned}</Right>
