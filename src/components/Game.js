@@ -43,6 +43,20 @@ const Game = () => {
         };
     }, [numCookies]);
 
+    function handleKeydown(ev) {
+        if (ev.code === 'Space') {
+            setNumCookies(numCookies + 1);
+        }
+    }
+
+    React.useEffect((ev) => {
+        window.addEventListener('keydown', handleKeydown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeydown);
+        };
+    });
+
     return (
         <Wrapper>
             <GameArea>
