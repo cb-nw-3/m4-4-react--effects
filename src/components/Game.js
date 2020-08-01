@@ -56,6 +56,8 @@ const Game = () => {
                                     return;
                                 }
 
+                                setNumCookies(numCookies - item.cost);
+
                                 setPurchasedItems(newPurchasedItems);
                             }}
                         />
