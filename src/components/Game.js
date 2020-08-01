@@ -48,9 +48,16 @@ const Game = () => {
                             cost={item.cost}
                             value={item.value}
                             numOwned={purchasedItems[item.id]}
-                            handleClick={() =>
-                                setPurchasedItems(newPurchasedItems)
-                            }
+                            handleClick={() => {
+                                if (numCookies < item.cost) {
+                                    alert(
+                                        `Not enough cookies to buy a ${item.name}`
+                                    );
+                                    return;
+                                }
+
+                                setPurchasedItems(newPurchasedItems);
+                            }}
                         />
                     );
                 })}
