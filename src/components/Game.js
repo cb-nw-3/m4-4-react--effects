@@ -4,39 +4,62 @@ import { Link } from "react-router-dom";
 
 import cookieSrc from "../cookie.svg";
 import Item from "./Item.js";
-import useInterval from "../../src/hooks/use-interval.hook";
+import useInterval from "../hooks/use-interval.hook";
 import handleGenericKeyPress from "../../src/hooks/handleGenericKeyPress.hook";
+import useKeydown from "../hooks/use-keydown.hook";
+import useDocumentTitle from "../hooks/useDocumentTitle.hook";
+
+import {
+  ItemButton,
+  Wrapper,
+  GameArea,
+  Button,
+  Cookie,
+  ItemArea,
+  SectionTitle,
+  Indicator,
+  Total,
+  HomeLink,
+} from "./styles/GameStyles.js";
+import useDave from "../../src/hooks/use-dave.hook.js";
 
 const items = [
-  { id: "cursor", name: "Cursor", cost: 10, value: 1 },
-  { id: "grandma", name: "Grandma", cost: 100, value: 10 },
-  { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  { id: "cursor", name: "Cursor", cost: 10, value: 1, method: "tick" },
+  { id: "grandma", name: "Grandma", cost: 100, value: 10, method: "tick" },
+  { id: "farm", name: "Farm", cost: 1000, value: 80, method: "tick" },
+  {
+    id: "megaCursor",
+    name: "MegaCursor",
+    cost: 100,
+    value: 2,
+    method: "click",
+  },
 ];
 
 const Game = () => {
   const [numCookies, setCookies] = React.useState(100);
+
   const [purchasedItems, setPurchasedItems] = React.useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
+    megaCursor: 0,
   });
 
   const [cookiesPerSecond, setCookiesPerSecond] = React.useState(0);
+  const [cookiesPerClick, setCookiesPerClick] = React.useState(1);
 
-  React.useEffect(() => {
-    const handleKeyPress = (ev) => {
-      console.log(ev.key);
-      setCookies(numCookies + 1);
-    };
+  function IncreaseCookie() {
+    setCookies(numCookies + 1);
+  }
 
-    document.title = `${numCookies} cookies - Cookie Clicker Workshop`;
-    window.addEventListener("keydown", handleKeyPress);
+  // why does this work?  I'm not setting title except for here... seems like it's weird a hook
+  useDocumentTitle({
+    title: `${numCookies} cookies - Cookie Clicker Workshop`,
+    fallbackTitle: `Cookie Clicker`,
+  });
 
-    return () => {
-      document.title = `Cookie Clicker`;
-      window.removeEventListener("keydown", handleKeyPress);
-    };
-  }, [numCookies]);
+  useKeydown("Space", IncreaseCookie);
 
   function calculateCookiesPerTick() {
     let cursor_cookies = purchasedItems.cursor * 1;
@@ -55,7 +78,10 @@ const Game = () => {
   }, 1000);
 
   function HandleCookieClick(event) {
-    setCookies(numCookies + 1);
+    console.log("------");
+
+    let extra_cookies = purchasedItems.megaCursor * 2;
+    setCookies(numCookies + 1 + extra_cookies);
   }
 
   function HandleItemClick(event) {
@@ -75,11 +101,17 @@ const Game = () => {
       } else if (item_from_items_list.id === "farm") {
         purchasedItems.farm = purchasedItems.farm + 1;
         setCookies(numCookies - item_from_items_list.cost);
+      } else if (item_from_items_list.id === "megaCursor") {
+        purchasedItems.megaCursor = purchasedItems.megaCursor + 1;
+        setCookiesPerClick(cookiesPerClick + item_from_items_list.value);
+        setCookies(numCookies - item_from_items_list.cost);
       }
+
       setPurchasedItems({
         cursor: purchasedItems.cursor,
         grandma: purchasedItems.grandma,
         farm: purchasedItems.farm,
+        megaCursor: purchasedItems.megaCursor,
       });
     }
     console.log(purchasedItems);
@@ -91,6 +123,9 @@ const Game = () => {
         <Indicator>
           <Total>{numCookies} cookies</Total>
           <strong>{cookiesPerSecond}</strong> cookies per second
+          <p>
+            <strong>{cookiesPerClick}</strong> cookies per click
+          </p>
         </Indicator>
         <Button onClick={HandleCookieClick}>
           <Cookie src={cookieSrc} />
@@ -121,70 +156,5 @@ const Game = () => {
     </Wrapper>
   );
 };
-
-const ItemButton = styled.button`
-  background-color: transparent;
-  position: absolute;
-  width: 380px;
-  height: 50px;
-  border: 0px;
-  z-index: 99;
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  height: 100vh;
-`;
-const GameArea = styled.div`
-  flex: 1;
-  display: grid;
-  place-items: center;
-`;
-const Button = styled.button`
-  border: none;
-  background: transparent;
-  cursor: pointer;
-`;
-
-const Cookie = styled.img`
-  width: 200px;
-`;
-
-const ItemArea = styled.div`
-  height: 100%;
-  padding-right: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 400px;
-`;
-
-const SectionTitle = styled.h3`
-  text-align: center;
-  font-size: 32px;
-  color: yellow;
-`;
-
-const Indicator = styled.div`
-  position: absolute;
-  width: 250px;
-  top: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  text-align: center;
-`;
-
-const Total = styled.h3`
-  font-size: 28px;
-  color: lime;
-`;
-
-const HomeLink = styled(Link)`
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  color: #666;
-`;
 
 export default Game;

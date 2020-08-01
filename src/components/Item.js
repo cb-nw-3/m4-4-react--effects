@@ -6,14 +6,17 @@ function HandleClick() {}
 const Item = ({ item, purchasedItems, isFirst }) => {
   const firstNameRef = React.useRef(null);
 
-  console.log(isFirst);
   let purchased_item = Object.entries(purchasedItems).find(
     (e) => e[0] === item.id
   );
 
   let purchased_item_count = purchased_item[1];
-
-  let value_statement = `cookies.  Produces ${item.value} cookies/second.`;
+  let value_statement;
+  if (item.id === "megaCursor") {
+    value_statement = `cookies.  Produces ${item.value} cookies/click.`;
+  } else {
+    value_statement = `cookies.  Produces ${item.value} cookies/second.`;
+  }
 
   React.useEffect(() => {
     if (isFirst) {
@@ -22,8 +25,8 @@ const Item = ({ item, purchasedItems, isFirst }) => {
   });
 
   return (
-    <ItemElement ref={firstNameRef}>
-      <Button onClick={HandleClick}></Button>
+    <ItemElement>
+      <Button ref={firstNameRef} onClick={HandleClick}></Button>
 
       <ItemNameAndCost>
         <ItemTitle>{item.name}</ItemTitle>
