@@ -2,8 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-import cookieSrc from '../cookie.svg';
+import useInterval from '../hooks/use-interval.hook';
 
+import cookieSrc from '../cookie.svg';
 import Item from './Item';
 
 const items = [
@@ -11,6 +12,16 @@ const items = [
     { id: 'grandma', name: 'Grandma', cost: 100, value: 10 },
     { id: 'farm', name: 'Farm', cost: 1000, value: 80 },
 ];
+
+const calculateCookiesPerTick = (purchasedItems) => {
+    return Object.keys(purchasedItems).reduce((acc, itemId) => {
+        const numOwned = purchasedItems[itemId];
+        const item = items.find((item) => item.id === itemId);
+        const value = item.value;
+
+        return acc + value * numOwned;
+    }, 0);
+};
 
 const Game = () => {
     const [numCookies, setNumCookies] = React.useState(0);
@@ -20,13 +31,20 @@ const Game = () => {
         farm: 0,
     });
 
+    useInterval(() => {
+        const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
+        setNumCookies(numCookies + numOfGeneratedCookies);
+    }, 1000);
+
     return (
         <Wrapper>
             <GameArea>
                 <Indicator>
                     <Total>{numCookies} cookies</Total>
-                    {/* TODO: Calcuate the cookies per second and show it here: */}
-                    <strong>0</strong> cookies per second
+                    <strong>
+                        {calculateCookiesPerTick(purchasedItems)}
+                    </strong>{' '}
+                    cookies per second
                 </Indicator>
                 <Button onClick={() => setNumCookies(numCookies + 1)}>
                     <Cookie src={cookieSrc} />
@@ -57,7 +75,6 @@ const Game = () => {
                                     );
                                     return;
                                 }
-
                                 setNumCookies(numCookies - item.cost);
 
                                 setPurchasedItems(newPurchasedItems);
