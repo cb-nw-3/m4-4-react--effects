@@ -2,9 +2,17 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-const Item = ({ name, cost, value, numOwned, handleClick }) => {
+const Item = ({ index, name, cost, value, numOwned, handleClick }) => {
+    const ref = React.useRef(null);
+
+    React.useEffect(() => {
+        if (index === 0) {
+            ref.current.focus();
+        }
+    }, []);
+
     return (
-        <Wrapper onClick={handleClick}>
+        <Wrapper ref={ref} onClick={handleClick}>
             <LineItem>
                 <Name>{name}</Name>
                 <Details>

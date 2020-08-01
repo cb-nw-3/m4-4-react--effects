@@ -82,7 +82,7 @@ const Game = () => {
 
             <ItemArea>
                 <SectionTitle>Items:</SectionTitle>
-                {items.map((item) => {
+                {items.map((item, index) => {
                     const newPurchasedItems = {
                         ...purchasedItems,
                         [item.id]: purchasedItems[item.id] + 1,
@@ -90,6 +90,7 @@ const Game = () => {
 
                     return (
                         <Item
+                            index={index}
                             key={item.id}
                             name={item.name}
                             cost={item.cost}
