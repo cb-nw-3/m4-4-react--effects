@@ -50,8 +50,10 @@ const Game = () => {
                             numOwned={purchasedItems[item.id]}
                             handleClick={() => {
                                 if (numCookies < item.cost) {
+                                    const numOfMissingCookies =
+                                        item.cost - numCookies;
                                     alert(
-                                        `Not enough cookies to buy a ${item.name}`
+                                        `You don't have enough cookies to afford a ${item.name}. \nGet back to work! You need ${numOfMissingCookies} more cookie(s) to buy it.`
                                     );
                                     return;
                                 }
