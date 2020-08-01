@@ -31,6 +31,8 @@ const Game = () => {
         farm: 0,
     });
 
+    const cookieRef = React.useRef(null);
+
     useInterval(() => {
         const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
         setNumCookies(numCookies + numOfGeneratedCookies);
@@ -67,7 +69,13 @@ const Game = () => {
                     </strong>{' '}
                     cookies per second
                 </Indicator>
-                <Button onClick={() => setNumCookies(numCookies + 1)}>
+                <Button
+                    onClick={() => {
+                        setNumCookies(numCookies + 1);
+                        cookieRef.current.blur();
+                    }}
+                    ref={cookieRef}
+                >
                     <Cookie src={cookieSrc} />
                 </Button>
             </GameArea>
