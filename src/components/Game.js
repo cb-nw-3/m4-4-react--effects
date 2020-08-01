@@ -23,7 +23,7 @@ import {
 } from "./styles/GameStyles.js";
 import useDave from "../../src/hooks/use-dave.hook.js";
 
-const items = [
+let items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1, method: "tick" },
   { id: "grandma", name: "Grandma", cost: 100, value: 10, method: "tick" },
   { id: "farm", name: "Farm", cost: 1000, value: 80, method: "tick" },
@@ -92,6 +92,8 @@ const Game = () => {
     // console.log(item_from_items_list);
 
     if (item_from_items_list.cost <= numCookies) {
+      let item_index = items.findIndex((i) => i.id === item_from_items_list.id);
+
       if (item_from_items_list.id === "cursor") {
         purchasedItems.cursor = purchasedItems.cursor + 1;
         setCookies(numCookies - item_from_items_list.cost);
@@ -106,6 +108,9 @@ const Game = () => {
         setCookiesPerClick(cookiesPerClick + item_from_items_list.value);
         setCookies(numCookies - item_from_items_list.cost);
       }
+      let cost = Math.floor(items[item_index].cost * 1.4);
+      items[item_index].cost = cost;
+      console.log(cost);
 
       setPurchasedItems({
         cursor: purchasedItems.cursor,
