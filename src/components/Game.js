@@ -13,8 +13,8 @@ const items = [
 ];
 
 const Game = () => {
-    // TODO: Replace this with React state!
-    const numCookies = 100;
+    const [count, setCount] = React.useState(0);
+    const numCookies = count;
     const purchasedItems = {
         cursor: 0,
         grandma: 0,
@@ -29,7 +29,7 @@ const Game = () => {
                     {/* TODO: Calcuate the cookies per second and show it here: */}
                     <strong>0</strong> cookies per second
                 </Indicator>
-                <Button>
+                <Button onClick={() => setCount(count + 1)}>
                     <Cookie src={cookieSrc} />
                 </Button>
             </GameArea>

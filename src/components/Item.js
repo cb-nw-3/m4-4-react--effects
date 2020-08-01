@@ -24,6 +24,7 @@ const Wrapper = styled.button`
     border-bottom: 1px solid grey;
     padding: 0;
     align-items: center;
+    color: white;
 `;
 
 const LineItem = styled.div`
@@ -34,7 +35,6 @@ const LineItem = styled.div`
 
 const Name = styled.div`
     font-size: 1.4em;
-    color: white;
 `;
 
 const Details = styled.div`
@@ -44,7 +44,6 @@ const Details = styled.div`
 
 const BigNumber = styled.span`
     font-size: 2em;
-    color: white;
 `;
 
 export default Item;
