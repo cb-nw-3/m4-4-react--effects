@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 import useInterval from '../hooks/use-interval.hook';
+import useKeydown from '../hooks/use-keydown.hook';
 
 import cookieSrc from '../cookie.svg';
 import Item from './Item';
@@ -31,8 +32,6 @@ const Game = () => {
         farm: 0,
     });
 
-    const cookieRef = React.useRef(null);
-
     useInterval(() => {
         const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
         setNumCookies(numCookies + numOfGeneratedCookies);
@@ -45,19 +44,14 @@ const Game = () => {
         };
     }, [numCookies]);
 
-    function handleKeydown(ev) {
-        if (ev.code === 'Space') {
-            setNumCookies(numCookies + 1);
-        }
-    }
+    const cookieRef = React.useRef(null);
 
-    React.useEffect((ev) => {
-        window.addEventListener('keydown', handleKeydown);
+    const incrementCookies = () => {
+        setNumCookies((c) => c + 1);
+        cookieRef.current.blur();
+    };
 
-        return () => {
-            window.removeEventListener('keydown', handleKeydown);
-        };
-    });
+    useKeydown('Space', incrementCookies);
 
     return (
         <Wrapper>
@@ -69,13 +63,7 @@ const Game = () => {
                     </strong>{' '}
                     cookies per second
                 </Indicator>
-                <Button
-                    onClick={() => {
-                        setNumCookies(numCookies + 1);
-                        cookieRef.current.blur();
-                    }}
-                    ref={cookieRef}
-                >
+                <Button onClick={incrementCookies} ref={cookieRef}>
                     <Cookie src={cookieSrc} />
                 </Button>
             </GameArea>
@@ -122,11 +110,13 @@ const Wrapper = styled.div`
     display: flex;
     height: 100vh;
 `;
+
 const GameArea = styled.div`
     flex: 1;
     display: grid;
     place-items: center;
 `;
+
 const Button = styled.button`
     border: none;
     background: transparent;
