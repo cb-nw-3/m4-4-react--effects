@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
+// Hooks
+import useDocumentTitle from '../hooks/use-document-title.hook';
 import useInterval from '../hooks/use-interval.hook';
 import useKeydown from '../hooks/use-keydown.hook';
 
@@ -32,18 +34,6 @@ const Game = () => {
         farm: 0,
     });
 
-    useInterval(() => {
-        const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
-        setNumCookies(numCookies + numOfGeneratedCookies);
-    }, 1000);
-
-    React.useEffect(() => {
-        document.title = `${numCookies} cookies - Cookie Game`;
-        return () => {
-            document.title = `Cookie Game`;
-        };
-    }, [numCookies]);
-
     const cookieRef = React.useRef(null);
 
     const incrementCookies = () => {
@@ -51,7 +41,17 @@ const Game = () => {
         cookieRef.current.blur();
     };
 
+    useDocumentTitle({
+        title: `${numCookies} cookies - Cookie Game`,
+        fallbackTitle: `Cookie Game`,
+    });
+
     useKeydown('Space', incrementCookies);
+
+    useInterval(() => {
+        const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
+        setNumCookies(numCookies + numOfGeneratedCookies);
+    }, 1000);
 
     return (
         <Wrapper>
