@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Item from "./Item";
+import useInterval from "../hooks/use-interval.hook";
 
 import cookieSrc from "../cookie.svg";
 
@@ -19,16 +20,42 @@ const Game = () => {
     farm: 0,
   });
 
+  const calculateCookiesPerTick = (purchasedItems) => {
+    let totalCookies = 0;
+    console.log(purchasedItems);
+    //loop over purchased items
+    Object.keys(purchasedItems).forEach((purchasedItem) => {
+      //get individual purchased item amount
+      let purchasedItemAmount = purchasedItems[purchasedItem];
+      //Look through items for the purchased item and get the value
+      let findItem = items.find((item) => {
+        return item.id === purchasedItem;
+      });
+      //Individual purchase item and times it by the value of that item
+      totalCookies += purchasedItemAmount * findItem.value;
+    });
+    return totalCookies;
+  };
+
+  useInterval(() => {
+    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
+    setNumCookies(numCookies + numOfGeneratedCookies);
+  }, 1000);
+
   return (
     <Wrapper>
       <GameArea>
         <Indicator>
           <Total>{numCookies} cookies</Total>
           {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>0</strong> cookies per second
+          <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per
+          second
         </Indicator>
-        <Button onClick={() => { setNumCookies(numCookies + 1);
-        }}>
+        <Button
+          onClick={() => {
+            setNumCookies(numCookies + 1);
+          }}
+        >
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
@@ -37,26 +64,25 @@ const Game = () => {
         <SectionTitle>Items:</SectionTitle>
         {items.map((item) => {
           return (
-            
             <Item
               key={item.id}
               name={item.name}
               numOwned={purchasedItems}
               handleClick={() => {
                 if (item.cost > numCookies) {
-                  window.alert("You don't have enough cookies to buy this item!");
+                  window.alert(
+                    "You don't have enough cookies to buy this item!"
+                  );
                   return;
                 } else {
                   setNumCookies(numCookies - item.cost);
-                  setPurchasedItems({purchasedItems, 
-                    [item.id]: purchasedItems[item.id] + 1});
+                  purchasedItems[item.id] += 1;
+                  setPurchasedItems(purchasedItems);
                 }
-                }}
-                />
-              )
-        }
-          )
-        }
+              }}
+            />
+          );
+        })}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
