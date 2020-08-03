@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Item from "./Item";
+import useInterval from "../hooks/use-interval.hook";
 
 import cookieSrc from "../cookie.svg";
 
@@ -21,13 +22,29 @@ const Game = () => {
     farm: 0,
   });
 
+  function calculateCookiesPerTick(data) {
+    let totalValue = 0;
+    items.forEach((item) => {
+      totalValue = totalValue + item.value * data[item.id];
+    });
+    return totalValue;
+  }
+
+  useInterval(() => {
+    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
+    // Add this number of cookies to the total
+    setNumCookies(numCookies + numOfGeneratedCookies);
+    console.log(numCookies + numOfGeneratedCookies);
+  }, 1000);
+
   return (
     <Wrapper>
       <GameArea>
         <Indicator>
           <Total>{numCookies} cookies</Total>
           {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>0</strong> cookies per second
+          <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per
+          second
         </Indicator>
         <Button
           onClick={() => {
