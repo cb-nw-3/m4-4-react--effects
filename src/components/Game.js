@@ -13,7 +13,7 @@ const items = [
 ];
 
 const Game = () => {
-  // TODO: Replace this with React state!
+  // Replace this with React state!
   const [numCookies, setNumCookies] = React.useState(100);
 
   const [purchasedItems, setPurchasedItems] = React.useState({
@@ -30,6 +30,12 @@ const Game = () => {
     return totalValue;
   }
 
+  let handleKeyDown = (event) => {
+    if (event.code === "Space") {
+      setNumCookies(numCookies + 1);
+    }
+  };
+
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
     // Add this number of cookies to the total
@@ -45,12 +51,20 @@ const Game = () => {
     };
   }, [numCookies]);
 
+  React.useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  });
+
   return (
     <Wrapper>
       <GameArea>
         <Indicator>
           <Total>{numCookies} cookies</Total>
-          {/* TODO: Calcuate the cookies per second and show it here: */}
+          {/*Calculate the cookies per second and show it here: */}
           <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per
           second
         </Indicator>
