@@ -40,6 +40,7 @@ const Item = ({
   return (
     <List>
       {items.map((item) => {
+        const temp = item.name === "mega" ? "click" : "second";
         return (
           <ListItem key={item.id}>
             <ItemInfo>
@@ -57,8 +58,8 @@ const Item = ({
               >
                 <h3>{item.name}</h3>
                 <span>
-                  Cost: {item.cost} cookie(s). Produces {item.value}{" "}
-                  cookies/second.
+                  Cost: {item.cost} cookie(s). Produces {item.value} cookies/
+                  {temp}.
                 </span>
               </BtnWrapper>
             </ItemInfo>

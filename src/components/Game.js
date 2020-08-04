@@ -10,6 +10,7 @@ const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  { id: "mega", name: "mega", cost: 2000, value: 100 },
 ];
 
 const Game = () => {
@@ -18,6 +19,7 @@ const Game = () => {
     cursor: 0,
     grandma: 0,
     farm: 0,
+    mega: 0,
   });
 
   useInterval(() => {
@@ -32,7 +34,7 @@ const Game = () => {
   useEffect(() => {
     const handleKeydown = (ev) => {
       if (ev.code === "Space") {
-        setNumCookies(++numCookies);
+        setNumCookies(++numCookies + purchasedItems.mega * 100);
       }
     };
 
@@ -54,7 +56,7 @@ const Game = () => {
         </Indicator>
         <Button
           onClick={() => {
-            setNumCookies(++numCookies);
+            setNumCookies(++numCookies + purchasedItems.mega * 100);
           }}
         >
           <Cookie src={cookieSrc} />
