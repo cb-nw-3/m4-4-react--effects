@@ -29,6 +29,20 @@ const Game = () => {
     document.title = `${numCookies} cookies. Cookie Clicker Workshop`;
   });
 
+  useEffect(() => {
+    const handleKeydown = (ev) => {
+      if (ev.code === "Space") {
+        setNumCookies(++numCookies);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeydown);
+
+    return () => {
+      window.removeEventListener(handleKeydown);
+    };
+  }, []);
+
   return (
     <Wrapper>
       <GameArea>
