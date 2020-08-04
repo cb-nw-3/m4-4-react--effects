@@ -49,6 +49,20 @@ const Game = () => {
     };
   }, [numCookies]);
 
+  const handleKeyPress = (ev) => {
+    if (ev.key === 32) {
+      setNumCookies(numCookies + 1);
+    }
+  };
+
+  React.useEffect(() => {
+    window.addEventListener("keyPress", handleKeyPress);
+
+    return () => {
+      window.removeEventListener("keyPress", handleKeyPress);
+    };
+  }, [numCookies]);
+
   return (
     <Wrapper>
       <GameArea>
