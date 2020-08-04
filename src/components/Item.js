@@ -1,9 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-const Item = ({ name, cost, value, numOwned, handleClick }) => {
+const Item = ({ name, cost, value, isFirst, numOwned, handleClick }) => {
+  const itemRef = React.useRef(null);
+  React.useEffect(() => {
+    if (isFirst) {
+      itemRef.current.focus();
+    }
+  });
+
   return (
-    <Wrapper onClick={handleClick}>
+    <Wrapper onClick={handleClick} ref={itemRef}>
       <div>
         <Name>{name}</Name>
         <ItemBuy>

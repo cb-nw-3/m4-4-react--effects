@@ -80,12 +80,17 @@ const Game = () => {
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
         {items.map((item, index) => {
+          let isFirst;
+          if (index === 0) {
+            isFirst = true;
+          }
           return (
             <Item
               key={item.id + index}
               name={item.name}
               cost={item.cost}
               value={item.value}
+              isFirst={isFirst}
               numOwned={purchasedItems[item.id]}
               handleClick={() => {
                 if (item.cost > numCookies) {
