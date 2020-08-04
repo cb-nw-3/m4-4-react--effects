@@ -32,6 +32,7 @@ const BtnWrapper = styled.button`
 
 const Item = ({
   items,
+  setItems,
   purchasedItems,
   handleClick,
   numCookies,
@@ -51,6 +52,8 @@ const Item = ({
                     const newState = { ...purchasedItems };
                     handleClick(newState);
                     setNumCookies(numCookies - item.cost);
+                    item.cost = purchasedItems[item.id] ** 2 + item.cost;
+                    setItems(items);
                   } else {
                     window.alert("Not enougn cookies");
                   }

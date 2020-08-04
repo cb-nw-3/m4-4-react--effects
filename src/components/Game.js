@@ -6,14 +6,20 @@ import useInterval from "../hooks/use-interval.hook";
 
 import cookieSrc from "../cookie.svg";
 
-const items = [
-  { id: "cursor", name: "Cursor", cost: 10, value: 1 },
-  { id: "grandma", name: "Grandma", cost: 100, value: 10 },
-  { id: "farm", name: "Farm", cost: 1000, value: 80 },
-  { id: "mega", name: "mega", cost: 2000, value: 100 },
-];
+// const items = [
+//   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
+//   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
+//   { id: "farm", name: "Farm", cost: 1000, value: 80 },
+//   { id: "mega", name: "mega", cost: 2000, value: 100 },
+// ];
 
 const Game = () => {
+  let [items, setItems] = React.useState([
+    { id: "cursor", name: "Cursor", cost: 10, value: 1 },
+    { id: "grandma", name: "Grandma", cost: 100, value: 10 },
+    { id: "farm", name: "Farm", cost: 1000, value: 80 },
+    { id: "mega", name: "mega", cost: 2000, value: 100 },
+  ]);
   let [numCookies, setNumCookies] = React.useState(100);
   let [purchasedItems, setPurchasedItems] = React.useState({
     cursor: 0,
@@ -67,6 +73,7 @@ const Game = () => {
         <SectionTitle>Items:</SectionTitle>
         <Item
           items={items}
+          setItems={setItems}
           purchasedItems={purchasedItems}
           handleClick={setPurchasedItems}
           numCookies={numCookies}
