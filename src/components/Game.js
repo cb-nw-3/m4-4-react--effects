@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import Item from "./Item";
 
 import cookieSrc from "../cookie.svg";
 
@@ -34,7 +35,7 @@ const Game = () => {
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {/* TODO: Add <Item> instances here, 1 for each item type. */}
+        <Item items={items} purchasedItems={purchasedItems} />
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
