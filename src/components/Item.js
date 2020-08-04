@@ -22,18 +22,45 @@ const ItemCounter = styled.div`
   align-items: center;
 `;
 
-const Item = ({ items, purchasedItems }) => {
+const BtnWrapper = styled.button`
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: #fff;
+`;
+
+const Item = ({
+  items,
+  purchasedItems,
+  handleClick,
+  numCookies,
+  setNumCookies,
+}) => {
   return (
     <List>
       {items.map((item) => {
         return (
           <ListItem key={item.id}>
             <ItemInfo>
-              <h3>{item.name}</h3>
-              <span>
-                Cost: {item.cost} cookie(s). Produces {item.value}{" "}
-                cookies/second.
-              </span>
+              <BtnWrapper
+                onClick={() => {
+                  if (numCookies >= item.cost) {
+                    purchasedItems[item.id] += 1;
+                    const newState = { ...purchasedItems };
+                    handleClick(newState);
+                    setNumCookies(numCookies - item.cost);
+                  } else {
+                    window.alert("Not enougn cookies");
+                  }
+                }}
+              >
+                <h3>{item.name}</h3>
+                <span>
+                  Cost: {item.cost} cookie(s). Produces {item.value}{" "}
+                  cookies/second.
+                </span>
+              </BtnWrapper>
             </ItemInfo>
             <ItemCounter>{purchasedItems[item.id]}</ItemCounter>
           </ListItem>
