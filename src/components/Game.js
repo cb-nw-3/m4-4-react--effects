@@ -5,6 +5,8 @@ import useInterval from "../hooks/use-interval.hook";
 
 import cookieSrc from "../cookie.svg";
 import Item from "./Item.js";
+import useKeyDown from "../hooks/useKeyDown";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
@@ -28,22 +30,14 @@ const Game = () => {
 
   const [numCookies, setNumCookies] = React.useState(100);
 
-  React.useEffect(() => {
-    document.title = `I have ${numCookies} cookies!`;
-  }, [numCookies]);
-
-  React.useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
-
-  const handleKeyDown = (ev) => {
-    if (ev.code === "Space") {
-      setNumCookies((cookies) => cookies + 1);
-    }
+  const cookiesPlusOne = () => {
+    setNumCookies((cookies) => cookies + 1);
   };
+
+  const title = `I have ${numCookies} cookies!`;
+  useDocumentTitle(title, "CookieClicker");
+
+  useKeyDown("Space", cookiesPlusOne);
 
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
