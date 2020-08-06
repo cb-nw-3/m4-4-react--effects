@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-// const Item = { index, name, cost, value, numOwned, handleClick };
 const Item = ({ index, name, cost, value, numOwned, handleClick }) => {
   console.log(numOwned);
+
   return (
     <>
-      <Wrapper>
+      <Wrapper onClick={handleClick}>
         <Name>{name}</Name>
         <Cost>Cost: {cost}</Cost>
         <Value>value: {value}</Value>

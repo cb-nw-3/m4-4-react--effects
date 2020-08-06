@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Item from "./Item";
 import cookieSrc from "../cookie.svg";
+import useInterval from "../hooks/use-interval.hook";
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
@@ -10,25 +11,59 @@ const items = [
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
 
+// let valueOfItems = {
+//   cursor: 1,
+//   grandma: 10,
+//   farm: 80,
+// };
+
+const calculateCookiesPerSecond = (purchasedItems) => {
+  // { cursor: 3, grandma: 1, farm: 0 } -> 3 * 1 + 1 * 10 + 0 * 80
+  let total = 0;
+  Object.keys(purchasedItems).forEach(function (purchasedKey) {
+    const purchasedValue = purchasedItems[purchasedKey];
+    const item = items.find(function (item) {
+      return purchasedKey === item.id;
+    });
+    total += purchasedValue * item.value;
+  });
+  // // Object.keys(purchasedItems).forEach(function(purchasedKey) {
+  //  // const purchasedValue = purchasedItems[purchasedKey];
+
+  //   //total += purchasedValue * valueOfItems[purchasedKey]
+  // });
+  // const value = items.value;
+  return total;
+};
 const Game = () => {
   // TODO: Replace this with React state!
-  const [numCookies, setNumCookies] = React.useState(1000);
+  const [numCookies, setNumCookies] = React.useState(10000);
   const [purchasedItems, setPurchasedItem] = React.useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
   });
 
+  React.useEffect(() => {
+    document.title = `you have ${numCookies} cookies`;
+  }, [numCookies]);
+
+  console.log(purchasedItems);
   const addCookies = () => {
     setNumCookies((cookies) => cookies + 1);
   };
+  useInterval(() => {
+    const numOfGeneratedCookies = calculateCookiesPerSecond(purchasedItems);
+    setNumCookies(numCookies + numOfGeneratedCookies);
+  }, 1000);
   return (
     <Wrapper>
       <GameArea>
         <Indicator>
           <Total>{numCookies} cookies</Total>
           {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>0</strong> cookies per second
+          <strong>{calculateCookiesPerSecond(purchasedItems)}</strong> cookies
+          per second
         </Indicator>
         <Button onClick={addCookies}>
           <Cookie src={cookieSrc} />
@@ -46,6 +81,19 @@ const Game = () => {
               cost={item.cost}
               value={item.value}
               numOwned={purchasedItems[item.id]}
+              handleClick={() => {
+                console.log(item.cost);
+                if (numCookies < item.cost) {
+                  alert("Cannot afford item");
+                  return;
+                } else {
+                  setNumCookies(numCookies - item.cost);
+                  setPurchasedItem({
+                    ...purchasedItems,
+                    [item.id]: purchasedItems[item.id] + 1,
+                  });
+                }
+              }}
             />
           );
         })}
