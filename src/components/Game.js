@@ -34,6 +34,10 @@ const Game = () => {
     setNumCookies(numCookies + numOfGeneratedCookies);
   }, 1000)
 
+React.useEffect(()=>{
+  document.title = `${numCookies} cookies - Cookie Game`
+})
+
   return (
     <Wrapper>
       <GameArea>
