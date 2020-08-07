@@ -4,7 +4,7 @@ import styled from 'styled-components'
 const Item = (props) => {
     return (
         <Wrapper
-        onClick = {props.handleClick}>
+        onClick={props.onClick}>
             <ItemInfo>
             <ItemName>{props.name}</ItemName>
                 <ItemDescription>{`Cost: ${props.cost} cookie(s). Produces ${props.value} cookies/second.`}</ItemDescription>
