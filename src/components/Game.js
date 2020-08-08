@@ -35,6 +35,7 @@ const calculateCookiesPerSecond = (purchasedItems) => {
   // const value = items.value;
   return total;
 };
+
 const Game = () => {
   // TODO: Replace this with React state!
   const [numCookies, setNumCookies] = React.useState(10000);
@@ -44,9 +45,22 @@ const Game = () => {
     farm: 0,
   });
 
+  const handleSpace = (event) => {
+    if (event.code === "Space") {
+      setNumCookies(numCookies + 1);
+    }
+  };
+
   React.useEffect(() => {
     document.title = `you have ${numCookies} cookies`;
   }, [numCookies]);
+
+  React.useEffect(() => {
+    window.addEventListener("keydown", handleSpace);
+    return () => {
+      window.removeEventListener("keydown", handleSpace);
+    };
+  });
 
   console.log(purchasedItems);
   const addCookies = () => {
@@ -56,12 +70,12 @@ const Game = () => {
     const numOfGeneratedCookies = calculateCookiesPerSecond(purchasedItems);
     setNumCookies(numCookies + numOfGeneratedCookies);
   }, 1000);
+
   return (
     <Wrapper>
       <GameArea>
         <Indicator>
           <Total>{numCookies} cookies</Total>
-          {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>{calculateCookiesPerSecond(purchasedItems)}</strong> cookies
           per second
         </Indicator>

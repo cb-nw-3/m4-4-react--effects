@@ -4,12 +4,19 @@ import styled from "styled-components";
 const Item = ({ index, name, cost, value, numOwned, handleClick }) => {
   console.log(numOwned);
 
+  const ref = React.useRef(null);
+  React.useEffect(() => {
+    if (index === 0) {
+      ref.current.focus();
+    }
+  }, []);
   return (
     <>
-      <Wrapper onClick={handleClick}>
+      <Wrapper onClick={handleClick} ref={ref}>
         <Name>{name}</Name>
         <Cost>Cost: {cost}</Cost>
         <Value>value: {value}</Value>
+
         <Paragraph>produces: {numOwned}</Paragraph>
       </Wrapper>
     </>
