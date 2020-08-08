@@ -13,7 +13,6 @@ const items = [
 ];
 
 const Game = () => {
-  // TODO: Replace this with React state!
   const [numCookies, setNumCookies] = React.useState(0);
   const [purchasedItems, setPurchasedItems] = React.useState({
     cursor: 0,
@@ -37,6 +36,19 @@ const Game = () => {
 React.useEffect(()=>{
   document.title = `${numCookies} cookies - Cookie Game`
 })
+
+const handleKeyPress = React.useCallback((event) => {
+  if (event.code === 'Space') {
+    setNumCookies(numCookies + 1)
+  }
+});
+
+React.useEffect(()=>{
+  window.addEventListener('keydown', handleKeyPress);
+
+  return () => {
+    window.removeEventListener('keydown', handleKeyPress)
+  };});
 
   return (
     <Wrapper>
